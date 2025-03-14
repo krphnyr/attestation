@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по лесному хозяйству</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #toc {
+            margin-bottom: 20px;
+        }
+        #toc h2 {
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #toc li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #toc li:hover {
+            background: #ddd;
+        }
+        .chapter {
+            display: none;
+        }
+        .chapter.active {
+            display: block;
+        }
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        .question p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .options li:hover {
+            background: #ddd;
+        }
+        .correct {
+            background: #27ae60 !important;
+            color: white;
+            animation: fadeIn 0.5s;
+        }
+        .incorrect {
+            background: #c0392b !important;
+            color: white;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .hidden {
+            display: none;
+        }
+        .score {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+        }
+        .motivation {
+            text-align: center;
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .back-button, .generate-test {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .back-button:hover, .generate-test:hover {
+            background: #3498db;
+        }
+        .selected {
+            background: #f1c40f !important; /* Желтый цвет для выбранных вариантов */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Тест по лесному хозяйству</h1>
+
+        <div id="toc">
+            <h2>Оглавление</h2>
+            <ul>
+                <li data-chapter="chapter-1-1">1.1 Таксационные измерения. Ошибки измерений, их свойства</li>
+                <li data-chapter="chapter-1-2">1.2 Нормативы проведения различных видов рубок лесных насаждений</li>
+                <li data-chapter="chapter-1-3">1.3 Технологические карты разработки лесосек</li>
+                <li data-chapter="chapter-1-4">1.4 Таксационные показатели насаждений</li>
+                <li data-chapter="chapter-1-5">1.5 Таксационное описание лесосеки. Предварительный осмотр лесосеки</li>
+                <li data-chapter="chapter-1-6">1.6 Отвод лесосек под различные виды рубок</li>
+                <li data-chapter="chapter-1-7">1.7 Методы таксации лесосек</li>
+                <li data-chapter="chapter-1-8">1.8 Материально-денежная оценка лесосек</li>
+                <li data-chapter="chapter-1-9">1.9 Нормативное обеспечение работ по отводу и таксации лесосек</li>
+                <li data-chapter="chapter-1-10">1.10 Требования по охране труда и технике безопасности</li>
+                <li data-chapter="chapter-1-11">1.11 Основы геодезических, картографических работ</li>
+                <li data-chapter="chapter-1-12">1.12 Правила санитарной безопасности в лесах</li>
+                <li data-chapter="chapter-1-13">1.13 Правила лесовосстановления</li>
+                <li data-chapter="chapter-1-14">1.14 Правила пожарной безопасности в лесах</li>
+            </ul>
+            <button class="generate-test">Составить вопросы для аттестации</button>
+        </div>
+
+        <!-- Глава 1.1 -->
+        <div class="chapter" id="chapter-1-1">
+            <div class="question">
+                <p>1. Таксация в переводе с латинского означает:</p>
+                <ul class="options">
+                    <li data-correct="false">выбор, отбор</li>
+                    <li data-correct="false">изучение, наука</li>
+                    <li data-correct="true">оценка, учет</li>
+                    <li data-correct="false">ядохимикат</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>2. Лесотаксационные приборы и инструменты:</p>
+                <ul class="options">
+                    <li data-correct="false">мерная лента, мерная вилка, полнотомер Биттерлиха, высотомер, возрастной бурав</li>
+                    <li data-correct="false">полнотомер Биттерлиха, высотомер, призма Н.П. Анучина, мерная скоба</li>
+                    <li data-correct="false">приростной бурав, мерная лента, мерная вилка, призма Н.П. Анучина, полнотомер Биттерлиха</li>
+                    <li data-correct="true">все варианты верны</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>3. Инструменты для непосредственного измерения диаметров деревьев и лесоматериалов:</p>
+                <ul class="options">
+                    <li data-correct="true">мерные вилки, мерные скобы, линейки</li>
+                    <li data-correct="false">полнотомер Биттерлиха, высотомер, призма Н.П. Анучина</li>
+                    <li data-correct="false">приростной бурав, мерная лента</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                    <li data-correct="false">все вышеперечисленное</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>4. Точность при определении диаметра по ступеням толщины в насаждении при закладке пробных площадей и таксации лесосек:</p>
+                <ul class="options">
+                    <li data-correct="false">1 или 2 см</li>
+                    <li data-correct="true">2 или 4 см</li>
+                    <li data-correct="false">0,1 см</li>
+                    <li data-correct="false">0,5 см</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>5. Точность при определении диаметра модельного дерева:</p>
+                <ul class="options">
+                    <li data-correct="false">1 или 2 см</li>
+                    <li data-correct="false">2 или 4 см</li>
+                    <li data-correct="true">0,1 см</li>
+                    <li data-correct="false">0,5 см</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>6. Точность при определении диаметра в верхнем отрезе у бревен в штабеле:</p>
+                <ul class="options">
+                    <li data-correct="true">1 или 2 см</li>
+                    <li data-correct="false">2 или 4 см</li>
+                    <li data-correct="false">0,1 см</li>
+                    <li data-correct="false">0,5 см</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>7. Мерная вилка - это...</p>
+                <ul class="options">
+                    <li data-correct="true">инструмент для измерения диаметров деревьев или сортиментов</li>
+                    <li data-correct="false">инструмент для измерения расстояний на местности</li>
+                    <li data-correct="false">инструмент для измерения торцов бревен</li>
+                    <li data-correct="false">прибор для измерения суммы площадей поперечных сечений стволов деревьев</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>8. Инструменты для измерения высоты:</p>
+                <ul class="options">
+                    <li data-correct="false">мерные ленты, линейки, лазерные и ультразвуковые дальномеры</li>
+                    <li data-correct="false">полнотомер Биттерлиха, высотомер, призма Н.П. Анучина</li>
+                    <li data-correct="true">высотомер, мерная вилка</li>
+                    <li data-correct="false">все вышеперечисленное</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>9. Инструменты для определения возраста у деревьев:</p>
+                <ul class="options">
+                    <li data-correct="false">полнотомер Биттерлиха</li>
+                    <li data-correct="false">мерная вилка</li>
+                    <li data-correct="true">возрастной бурав</li>
+                    <li data-correct="false">мерная лента</li>
+                    <li data-correct="false">приростной бурав</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>10. Призма Н.П. Анучина - это...</p>
+                <ul class="options">
+                    <li data-correct="false">аксиометр</li>
+                    <li data-correct="false">высотомер</li>
+                    <li data-correct="true">полнотомер</li>
+                    <li data-correct="false">стереоскоп</li>
+                    <li data-correct="false">эклиметр</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>11. Полнотомер - это...</p>
+                <ul class="options">
+                    <li data-correct="false">инструмент для измерения диаметров деревьев или сортиментов</li>
+                    <li data-correct="false">инструмент для измерения расстояний на местности</li>
+                    <li data-correct="false">инструмент для измерения торцов бревен</li>
+                    <li data-correct="false">прибор для измерения высот стоящих деревьев</li>
+                    <li data-correct="true">прибор для измерения суммы площадей поперечных сечений стволов деревьев</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>12. Приборы для определения суммы площадей сечений деревьев, образующих насаждение:</p>
+                <ul class="options">
+                    <li data-correct="false">высотомер</li>
+                    <li data-correct="true">призма Н.П. Анучина</li>
+                    <li data-correct="true">прибор Биттерлиха</li>
+                    <li data-correct="false">эклиметр</li>
+                    <li data-correct="false">резистограф</li>
+                    <li data-correct="false">теодолит</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>13. В таксации высоту измеряют в...</p>
+                <ul class="options">
+                    <li data-correct="false">м2/см2</li>
+                    <li data-correct="false">см</li>
+                    <li data-correct="false">м3</li>
+                    <li data-correct="true">м</li>
+                    <li data-correct="false">км</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>14. В таксации насаждения сумму площадей сечения измеряют в...</p>
+                <ul class="options">
+                    <li data-correct="true">м2/га</li>
+                    <li data-correct="false">см</li>
+                    <li data-correct="false">м3</li>
+                    <li data-correct="false">м</li>
+                    <li data-correct="false">км</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>15. Какие есть виды измерений:</p>
+                <ul class="options">
+                    <li data-correct="true">прямые</li>
+                    <li data-correct="true">косвенные</li>
+                    <li data-correct="true">совокупные</li>
+                    <li data-correct="false">параллельные</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>16. Прямые измерения:</p>
+                <ul class="options">
+                    <li data-correct="true">результат получен путем сравнения измеряемого объекта с эталонной величиной</li>
+                    <li data-correct="false">результат получен путем измерения определенных параметров, связанных с искомой величиной зависимостью (формулой)</li>
+                    <li data-correct="false">искомые величины определяются из совокупности прямых измерений и ряда вычислений</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>17. Косвенные измерения:</p>
+                <ul class="options">
+                    <li data-correct="false">результат получен путем сравнения измеряемого объекта с эталонной величиной</li>
+                    <li data-correct="true">результат получен путем измерения определенных параметров, связанных с искомой величиной зависимостью (формулой)</li>
+                    <li data-correct="false">искомые величины определяются из совокупности прямых измерений и ряда вычислений</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>18. Совокупные измерения:</p>
+                <ul class="options">
+                    <li data-correct="false">результат получен путем сравнения измеряемого объекта с эталонной величиной</li>
+                    <li data-correct="false">результат получен путем измерения определенных параметров, связанных с искомой величиной зависимостью (формулой)</li>
+                    <li data-correct="true">искомые величины определяются из совокупности прямых измерений и ряда вычислений</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>19. Ошибки измерения бывают:</p>
+                <ul class="options">
+                    <li data-correct="true">грубые</li>
+                    <li data-correct="true">систематические</li>
+                    <li data-correct="true">случайные</li>
+                    <li data-correct="false">нет правильного ответа</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>20. Основная причина грубых ошибок:</p>
+                <ul class="options">
+                    <li data-correct="true">человеческий фактор</li>
+                    <li data-correct="true">неисправность прибора</li>
+                    <li data-correct="false">точность прибора</li>
+                    <li data-correct="false">все вышеперечисленное</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>21. Основная причина систематических ошибок:</p>
+                <ul class="options">
+                    <li data-correct="false">человеческий фактор</li>
+                    <li data-correct="true">неисправность прибора</li>
+                    <li data-correct="false">точность прибора</li>
+                    <li data-correct="false">все вышеперечисленное</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>22. Основная причина случайных ошибок:</p>
+                <ul class="options">
+                    <li data-correct="false">человеческий фактор</li>
+                    <li data-correct="false">неисправность прибора</li>
+                    <li data-correct="true">точность прибора</li>
+                    <li data-correct="false">все вышеперечисленное</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>23. Свойства грубых ошибок:</p>
+                <ul class="options">
+                    <li data-correct="false">всегда с одним знаком ("+" или "-"), имеют свойство накопления, трудно обнаружимы</li>
+                    <li data-correct="true">значительны по величине, в большинстве случаев обнаруживаются и заметны, могут быть с обоими знаками ("+" или "-")</li>
+                    <li data-correct="false">могут быть с обоими знаками ("+" или "-"), при массовых измерениях легко самокомпенсируются</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>24. Свойства систематических ошибок:</p>
+                <ul class="options">
+                    <li data-correct="true">всегда с одним знаком ("+" или "-"), имеют свойство накопления, трудно обнаружимы</li>
+                    <li data-correct="false">значительны по величине, в большинстве случаев обнаруживаются и заметны, могут быть с обоими знаками ("+" или "-")</li>
+                    <li data-correct="false">могут быть с обоими знаками ("+" или "-"), при массовых измерениях легко самокомпенсируются</li>
+                </ul>
+            </div>
+            <div class="question">
+                <p>25. Свойства случайных ошибок:</p>
+                <ul class="options">
+                    <li data-correct="false">всегда с одним знаком ("+" или "-"), имеют свойство накопления, трудно обнаружимы</li>
+                    <li data-correct="false">значительны по величине, в большинстве случаев обнаруживаются и заметны, могут быть с обоими знаками ("+" или "-")</li>
+                    <li data-correct="true">могут быть с обоими знаками ("+" или "-"), при массовых измерениях легко самокомпенсируются</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.2 -->
+        <div class="chapter" id="chapter-1-2">
+            <div class="question">
+                <p>1. К форме сплошных рубок, при которой весь древостой на лесосеке вырубается за 1 прием, относятся виды рубок с возобновлением:</p>
+                <ul class="options">
+                    <li data-correct="false">естественным</li>
+                    <li data-correct="false">сопутствующим</li>
+                    <li data-correct="true">предварительным и последующим</li>
+                    <li data-correct="false">сопутствующим и последующим</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.3 -->
+        <div class="chapter" id="chapter-1-3">
+            <div class="question">
+                <p>1. Технологическим процессом заготовки сортиментов на лесосеке предусматривается последовательность выполнения технологических операций:</p>
+                <ul class="options">
+                    <li data-correct="false">валка, трелевка, очистка от сучьев, штабелевка</li>
+                    <li data-correct="false">валка, обрезка сучьев, трелевка, штабелевка</li>
+                    <li data-correct="true">валка, обрезка сучьев, раскряжевка, перемещение к погрузочному пункту, сортировка, штабелевка</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.4 -->
+        <div class="chapter" id="chapter-1-4">
+            <div class="question">
+                <p>1. Происхождение естественного древостоя может быть:</p>
+                <ul class="options">
+                    <li data-correct="true">семенным и порослевым</li>
+                    <li data-correct="false">простым и сложным</li>
+                    <li data-correct="false">чистым и смешанным</li>
+                    <li data-correct="false">одновозрастным и разновозрастным</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.5 -->
+        <div class="chapter" id="chapter-1-5">
+            <div class="question">
+                <p>1. Таксационное описание лесосеки составляется на основании данных:</p>
+                <ul class="options">
+                    <li data-correct="true">полученных по результатам отвода и таксации лесосеки</li>
+                    <li data-correct="false">ГЛР</li>
+                    <li data-correct="false">материалов лесоустройства</li>
+                    <li data-correct="false">визуального осмотра участка леса отведенного в рубку</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.6 -->
+        <div class="chapter" id="chapter-1-6">
+            <div class="question">
+                <p>1. При отводе лесосек:</p>
+                <ul class="options">
+                    <li data-correct="false">устанавливаются и обозначаются на местности границы лесосек, отбираются и отмечаются деревья, предназначенные для рубки при проведении выборочных рубок</li>
+                    <li data-correct="false">допускается рубка деревьев на граничных визирах и при закладке пробных площадей, включая установку столбов на углах лесосек</li>
+                    <li data-correct="false">производят промер линий, измерение углов между ними и углов наклона, а также инструментальную привязку к квартальным просекам, таксационным визирам или другим постоянным ориентирам</li>
+                    <li data-correct="true">верны все варианты ответов</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.7 -->
+        <div class="chapter" id="chapter-1-7">
+            <div class="question">
+                <p>Примерный вопрос для 1.7 (добавьте реальные вопросы):</p>
+                <ul class="options">
+                    <li data-correct="true">Примерный правильный ответ</li>
+                    <li data-correct="false">Неправильный ответ</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.8 -->
+        <div class="chapter" id="chapter-1-8">
+            <div class="question">
+                <p>1. Товарная структура древостоя - это...</p>
+                <ul class="options">
+                    <li data-correct="false">взаимно увязанное расположение составляющих лесное насаждение компонентов, влияющих на его биологическую целостность и устойчивость</li>
+                    <li data-correct="true">распределение запаса древесины древостоя по категориям (классам) крупности, сортам и (или) сортиментам деловой древесины, дров и отходов</li>
+                    <li data-correct="false">лесного насаждения, обусловленную биологическими особенностями лесной растительности и внешней среды</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.9 -->
+        <div class="chapter" id="chapter-1-9">
+            <div class="question">
+                <p>1. Лесное насаждение относится к хвойному или твердолиственному хозяйству при наличии в его составе древесных пород соответствующей группы (хвойных или твердолиственных древесных пород семенного происхождения):</p>
+                <ul class="options">
+                    <li data-correct="false">60% и более</li>
+                    <li data-correct="true">50% и более</li>
+                    <li data-correct="false">не менее 40%</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.10 -->
+        <div class="chapter" id="chapter-1-10">
+            <div class="question">
+                <p>1. Длительность непрерывной работы вальщика леса с бензиномоторной пилой должна составлять:</p>
+                <ul class="options">
+                    <li data-correct="false">не более 30...40 минут</li>
+                    <li data-correct="true">не более 40...50 минут</li>
+                    <li data-correct="false">не более 50...60 минут</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.11 -->
+        <div class="chapter" id="chapter-1-11">
+            <div class="question">
+                <p>1. В каком диапазоне отсчитывается географическая широта?</p>
+                <ul class="options">
+                    <li data-correct="true">0°...90°</li>
+                    <li data-correct="false">0°...180°</li>
+                    <li data-correct="false">180°...360°</li>
+                    <li data-correct="false">270°...360°</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.12 -->
+        <div class="chapter" id="chapter-1-12">
+            <div class="question">
+                <p>1. Правовые основания для отвода лесосек под санитарно-оздоровительные мероприятия:</p>
+                <ul class="options">
+                    <li data-correct="true">акт лесопатологического обследования, размещенный в установленном порядке в сети Интернет более 20 дней</li>
+                    <li data-correct="false">акт лесопатологического обследования, утвержденный уполномоченным должностным лицом и размещенный в установленном порядке в интернет более 20 дней</li>
+                    <li data-correct="false">на участках, переданных в аренду и бессрочное (постоянное) пользование - проект освоения лесов, на остальных участках - лесохозяйственный регламент лесничества</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.13 -->
+        <div class="chapter" id="chapter-1-13">
+            <div class="question">
+                <p>1. Отвод земель, предназначенных для лесовосстановления, включает в себя работы по определению:</p>
+                <ul class="options">
+                    <li data-correct="true">геодезических координат</li>
+                    <li data-correct="false">азимутов, румбов (буссольную съемку), промер линий</li>
+                    <li data-correct="false">географических координат</li>
+                    <li data-correct="true">характерных (поворотных) точек</li>
+                    <li data-correct="false">магнитных азимутов</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Глава 1.14 -->
+        <div class="chapter" id="chapter-1-14">
+            <div class="question">
+                <p>1. Предупреждение лесных пожаров (противопожарное обустройство лесов и обеспечение средствами предупреждения и тушения лесных пожаров) на лесных участках, предоставленных в постоянное (бессрочное) пользование или аренду, осуществляется:</p>
+                <ul class="options">
+                    <li data-correct="true">лицами, использующими леса на основании проекта освоения лесов</li>
+                    <li data-correct="false">органами государственной власти субъектов Российской Федерации или органами местного самоуправления</li>
+                    <li data-correct="false">Федеральным агентством лесного хозяйства</li>
+                    <li data-correct="false">Министерством природных ресурсов и экологии Российской Федерации</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Контейнер для теста аттестации -->
+        <div class="chapter" id="test-chapter"></div>
+    </div>
+
+    <script>
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let answeredQuestions = 0;
+        const toc = document.getElementById('toc');
+        const chapters = document.querySelectorAll('.chapter');
+        const container = document.querySelector('.container');
+        let scoreElement = null;
+        let motivationElement = null;
+
+        // Инициализация оглавления
+        document.querySelectorAll('#toc li').forEach(item => {
+            item.addEventListener('click', function() {
+                toc.classList.add('hidden');
+                const chapterId = this.getAttribute('data-chapter');
+                const chapter = document.getElementById(chapterId);
+                chapter.classList.add('active');
+
+                if (!scoreElement) {
+                    scoreElement = document.createElement('div');
+                    scoreElement.id = 'score';
+                    scoreElement.classList.add('score');
+                    scoreElement.textContent = 'Результат: 0%';
+                    container.appendChild(scoreElement);
+
+                    motivationElement = document.createElement('div');
+                    motivationElement.id = 'motivation';
+                    motivationElement.classList.add('motivation');
+                    container.appendChild(motivationElement);
+                }
+
+                if (!chapter.querySelector('.back-button')) {
+                    const backButton = document.createElement('button');
+                    backButton.textContent = 'К оглавлению';
+                    backButton.classList.add('back-button');
+                    backButton.addEventListener('click', resetChapter);
+                    chapter.insertBefore(backButton, chapter.firstChild);
+                }
+
+                totalQuestions = chapter.querySelectorAll('.question').length;
+                correctAnswers = 0;
+                answeredQuestions = 0;
+                updateScore();
+                initializeOptions(chapterId);
+            });
+        });
+
+        // Обработчик для кнопки "Составить вопросы для аттестации"
+        document.querySelector('.generate-test').addEventListener('click', function() {
+            toc.classList.add('hidden');
+            const testChapter = document.getElementById('test-chapter');
+            testChapter.innerHTML = '';
+            testChapter.classList.add('active');
+
+            const questionCounts = {
+                'chapter-1-1': 3,
+                'chapter-1-2': 4,
+                'chapter-1-3': 2,
+                'chapter-1-4': 5,
+                'chapter-1-5': 4,
+                'chapter-1-6': 4,
+                'chapter-1-7': 3,
+                'chapter-1-8': 3,
+                'chapter-1-9': 2,
+                'chapter-1-10': 2,
+                'chapter-1-11': 2,
+                'chapter-1-12': 2,
+                'chapter-1-13': 2,
+                'chapter-1-14': 2
+            };
+
+            let allSelectedQuestions = [];
+            for (const chapterId in questionCounts) {
+                const questions = Array.from(document.querySelectorAll(`#${chapterId} .question`));
+                const count = Math.min(questionCounts[chapterId], questions.length);
+                const shuffled = questions.sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, count).map(q => q.cloneNode(true));
+                allSelectedQuestions = allSelectedQuestions.concat(selected);
+            }
+
+            allSelectedQuestions.sort(() => 0.5 - Math.random());
+            allSelectedQuestions.forEach((question, index) => {
+                const questionText = question.querySelector('p').textContent.split('. ').slice(1).join('. ');
+                question.querySelector('p').textContent = `${index + 1}. ${questionText}`;
+                testChapter.appendChild(question);
+            });
+
+            if (!scoreElement) {
+                scoreElement = document.createElement('div');
+                scoreElement.id = 'score';
+                scoreElement.classList.add('score');
+                scoreElement.textContent = 'Результат: 0%';
+                container.appendChild(scoreElement);
+
+                motivationElement = document.createElement('div');
+                motivationElement.id = 'motivation';
+                motivationElement.classList.add('motivation');
+                container.appendChild(motivationElement);
+            }
+
+            if (!testChapter.querySelector('.back-button')) {
+                const backButton = document.createElement('button');
+                backButton.textContent = 'К оглавлению';
+                backButton.classList.add('back-button');
+                backButton.addEventListener('click', resetChapter);
+                testChapter.insertBefore(backButton, testChapter.firstChild);
+            }
+
+            totalQuestions = allSelectedQuestions.length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            updateScore();
+            initializeOptions('test-chapter');
+        });
+
+        function initializeOptions(chapterId) {
+            document.querySelectorAll(`#${chapterId} .options li`).forEach(option => {
+                option.removeEventListener('click', handleOptionClick);
+                option.addEventListener('click', handleOptionClick);
+            });
+        }
+
+        function handleOptionClick() {
+            const question = this.closest('.question');
+            const options = question.querySelectorAll('.options li');
+
+            if (question.classList.contains('answered')) return;
+
+            const isCorrect = this.getAttribute('data-correct') === 'true';
+            const selectedOptions = Array.from(options).filter(opt => opt.classList.contains('selected'));
+
+            if (!this.classList.contains('selected')) {
+                this.classList.add('selected');
+                selectedOptions.push(this);
+            }
+
+            // Подсчитываем количество правильных ответов в вопросе
+            const totalCorrect = Array.from(options).filter(opt => opt.getAttribute('data-correct') === 'true').length;
+
+            if (!isCorrect) {
+                // Если выбран неверный ответ, показываем только его
+                options.forEach(opt => {
+                    if (opt !== this) opt.classList.add('hidden');
+                    opt.style.pointerEvents = 'none';
+                });
+                this.classList.remove('selected');
+                this.classList.add('incorrect');
+                question.classList.add('answered');
+                answeredQuestions++;
+                updateScore();
+            } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
+                // Если выбраны все правильные ответы
+                options.forEach(opt => {
+                    if (opt.getAttribute('data-correct') === 'true') {
+                        opt.classList.remove('selected');
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('hidden');
+                    }
+                    opt.style.pointerEvents = 'none';
+                });
+                question.classList.add('answered');
+                answeredQuestions++;
+                correctAnswers++;
+                updateScore();
+            }
+        }
+
+        function updateScore() {
+            const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+            scoreElement.textContent = `Результат: ${percentage.toFixed(2)}%`;
+
+            let motivation;
+            if (percentage === 100) {
+                motivation = "Превосходно! Вы настоящий эксперт!";
+            } else if (percentage >= 80) {
+                motivation = "Отличная работа! Продолжайте в том же духе!";
+            } else if (percentage >= 60) {
+                motivation = "Хорошо! Есть к чему стремиться!";
+            } else {
+                motivation = "Не сдавайтесь! Практика делает совершенство!";
+            }
+            motivationElement.textContent = motivation;
+        }
+
+        function resetChapter() {
+            const activeChapter = document.querySelector('.chapter.active');
+            activeChapter.classList.remove('active');
+            toc.classList.remove('hidden');
+            scoreElement.remove();
+            motivationElement.remove();
+            scoreElement = null;
+            motivationElement = null;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            activeChapter.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
+            activeChapter.querySelectorAll('.options li').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                opt.style.pointerEvents = 'auto';
+            });
+            if (activeChapter.id === 'test-chapter') activeChapter.innerHTML = '';
+        }
+    </script>
+</body>
+</html>
