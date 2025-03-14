@@ -6,126 +6,348 @@
     <title>АТТЕСТАЦИОННЫЕ ВОПРОСЫ ПО ТЕМЕ ОТВОД И ТАКСАЦИЯ ЛЕСОСЕК</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
             margin: 0;
             padding: 20px;
+            color: #333;
+            overflow-x: hidden; /* Предотвращает горизонтальную прокрутку */
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            width: 100%;
+            box-sizing: border-box; /* Учитывает padding в ширине */
+        }
+        .container:hover {
+            transform: translateY(-5px);
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #00695c;
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word; /* Перенос длинных слов */
         }
         #toc {
             margin-bottom: 20px;
         }
         #toc h2 {
-            color: #2980b9;
-            margin-bottom: 10px;
+            color: #00796b;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
         }
         #toc ul {
             list-style-type: none;
             padding: 0;
         }
         #toc li {
-            padding: 10px;
-            margin: 5px 0;
-            background: #ecf0f1;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f5fafa;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            font-size: 1em;
+            word-wrap: break-word;
         }
         #toc li:hover {
-            background: #ddd;
+            background: #e0f2f1;
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
         .chapter {
             display: none;
         }
         .chapter.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
         .question {
             margin: 20px 0;
             padding: 15px;
-            background: #ecf0f1;
-            border-radius: 5px;
+            background: #f9fbfc;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        .question:hover {
+            transform: translateY(-3px);
         }
         .question p {
-            margin: 0 0 10px 0;
-            font-weight: bold;
+            margin: 0 0 12px 0;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #004d40;
+            word-wrap: break-word;
         }
         .options {
             list-style-type: none;
             padding: 0;
         }
         .options li {
-            padding: 10px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 6px 0;
+            background: #ffffff;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            font-size: 1em;
+            word-wrap: break-word;
         }
         .options li:hover {
-            background: #ddd;
+            background: #e8f5e9;
+            transform: translateX(3px);
         }
         .correct {
-            background: #27ae60 !important;
+            background: #4caf50 !important;
             color: white;
-            animation: fadeIn 0.5s;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            transform: scale(1.02);
         }
         .incorrect {
-            background: #c0392b !important;
+            background: #f44336 !important;
             color: white;
-            animation: fadeIn 0.5s;
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+            transform: scale(1.02);
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .hidden {
             display: none;
         }
-        .score {
-            text-align: center;
-            margin-top: 30px;
-            padding: 15px;
-            background: #3498db;
-            color: white;
-            border-radius: 5px;
-        }
-        .motivation {
-            text-align: center;
-            margin-top: 10px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
         .back-button, .generate-test {
             display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background: #2980b9;
+            margin: 20px auto; /* Центрирование кнопок */
+            padding: 10px 25px;
+            background: #00796b;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background 0.3s;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+            width: fit-content; /* Адаптивная ширина */
         }
         .back-button:hover, .generate-test:hover {
-            background: #3498db;
+            background: #009688;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 150, 136, 0.4);
         }
         .selected {
-            background: #f1c40f !important; /* Желтый цвет для выбранных вариантов */
+            background: #ffca28 !important;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(255, 202, 40, 0.4);
+        }
+        /* Стили для всплывающего окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: fadeInBackdrop 0.3s ease;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.4s ease;
+            box-sizing: border-box;
+        }
+        .modal-content h2 {
+            color: #00695c;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .modal-content p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .modal-content .score {
+            color: #0288d1;
+            font-weight: bold;
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        .modal-content .motivation {
+            color: #555;
+            font-style: italic;
+            font-size: 1em;
+        }
+        .modal-content button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: #00796b;
             color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+            width: fit-content;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .modal-content button:hover {
+            background: #009688;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 150, 136, 0.4);
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        @keyframes fadeInBackdrop {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Медиа-запросы для мобильных устройств */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 15px;
+                margin: 0;
+                max-width: 100%;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+            #toc h2 {
+                font-size: 1.3em;
+                margin-bottom: 10px;
+            }
+            #toc li {
+                padding: 10px;
+                margin: 5px 0;
+                font-size: 0.9em;
+            }
+            .question {
+                margin: 15px 0;
+                padding: 12px;
+            }
+            .question p {
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            .options li {
+                padding: 10px;
+                margin: 5px 0;
+                font-size: 0.9em;
+            }
+            .back-button, .generate-test {
+                padding: 8px 20px;
+                font-size: 0.9em;
+                margin: 15px auto;
+            }
+            .modal-content {
+                padding: 15px;
+                max-width: 90%;
+            }
+            .modal-content h2 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+            .modal-content p {
+                font-size: 1em;
+            }
+            .modal-content .score {
+                font-size: 1.8em;
+            }
+            .modal-content .motivation {
+                font-size: 0.9em;
+            }
+            .modal-content button {
+                padding: 8px 20px;
+                font-size: 0.9em;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+            #toc h2 {
+                font-size: 1.1em;
+            }
+            #toc li {
+                padding: 8px;
+                font-size: 0.85em;
+            }
+            .question {
+                margin: 10px 0;
+                padding: 10px;
+            }
+            .question p {
+                font-size: 0.9em;
+                margin-bottom: 8px;
+            }
+            .options li {
+                padding: 8px;
+                font-size: 0.85em;
+            }
+            .back-button, .generate-test {
+                padding: 6px 15px;
+                font-size: 0.85em;
+                margin: 10px auto;
+            }
+            .modal-content {
+                padding: 10px;
+            }
+            .modal-content h2 {
+                font-size: 1.3em;
+            }
+            .modal-content .score {
+                font-size: 1.5em;
+            }
+            .modal-content .motivation {
+                font-size: 0.85em;
+            }
+            .modal-content button {
+                padding: 6px 15px;
+                font-size: 0.85em;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -2733,6 +2955,16 @@
         <div class="chapter" id="test-chapter"></div>
     </div>
 
+    <!-- Всплывающее окно -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <h2>Результаты</h2>
+            <p>Ваш результат: <span class="score" id="modal-score">0%</span></p>
+            <p class="motivation" id="modal-motivation"></p>
+            <button id="close-modal">Закрыть</button>
+        </div>
+    </div>
+
     <script>
         let totalQuestions = 0;
         let correctAnswers = 0;
@@ -2740,8 +2972,16 @@
         const toc = document.getElementById('toc');
         const chapters = document.querySelectorAll('.chapter');
         const container = document.querySelector('.container');
-        let scoreElement = null;
-        let motivationElement = null;
+        const modal = document.getElementById('result-modal');
+        const modalScore = document.getElementById('modal-score');
+        const modalMotivation = document.getElementById('modal-motivation');
+        const closeModalBtn = document.getElementById('close-modal');
+
+        // Закрытие модального окна и возврат к оглавлению
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            resetChapter();
+        });
 
         // Инициализация оглавления
         document.querySelectorAll('#toc li').forEach(item => {
@@ -2750,19 +2990,6 @@
                 const chapterId = this.getAttribute('data-chapter');
                 const chapter = document.getElementById(chapterId);
                 chapter.classList.add('active');
-
-                if (!scoreElement) {
-                    scoreElement = document.createElement('div');
-                    scoreElement.id = 'score';
-                    scoreElement.classList.add('score');
-                    scoreElement.textContent = 'Результат: 0%';
-                    container.appendChild(scoreElement);
-
-                    motivationElement = document.createElement('div');
-                    motivationElement.id = 'motivation';
-                    motivationElement.classList.add('motivation');
-                    container.appendChild(motivationElement);
-                }
 
                 if (!chapter.querySelector('.back-button')) {
                     const backButton = document.createElement('button');
@@ -2775,7 +3002,6 @@
                 totalQuestions = chapter.querySelectorAll('.question').length;
                 correctAnswers = 0;
                 answeredQuestions = 0;
-                updateScore();
                 initializeOptions(chapterId);
             });
         });
@@ -2820,19 +3046,6 @@
                 testChapter.appendChild(question);
             });
 
-            if (!scoreElement) {
-                scoreElement = document.createElement('div');
-                scoreElement.id = 'score';
-                scoreElement.classList.add('score');
-                scoreElement.textContent = 'Результат: 0%';
-                container.appendChild(scoreElement);
-
-                motivationElement = document.createElement('div');
-                motivationElement.id = 'motivation';
-                motivationElement.classList.add('motivation');
-                container.appendChild(motivationElement);
-            }
-
             if (!testChapter.querySelector('.back-button')) {
                 const backButton = document.createElement('button');
                 backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
@@ -2844,7 +3057,6 @@
             totalQuestions = allSelectedQuestions.length;
             correctAnswers = 0;
             answeredQuestions = 0;
-            updateScore();
             initializeOptions('test-chapter');
         });
 
@@ -2869,11 +3081,9 @@
                 selectedOptions.push(this);
             }
 
-            // Подсчитываем количество правильных ответов в вопросе
             const totalCorrect = Array.from(options).filter(opt => opt.getAttribute('data-correct') === 'true').length;
 
             if (!isCorrect) {
-                // Если выбран неверный ответ, показываем только его
                 options.forEach(opt => {
                     if (opt !== this) opt.classList.add('hidden');
                     opt.style.pointerEvents = 'none';
@@ -2882,9 +3092,8 @@
                 this.classList.add('incorrect');
                 question.classList.add('answered');
                 answeredQuestions++;
-                updateScore();
+                checkCompletion();
             } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
-                // Если выбраны все правильные ответы
                 options.forEach(opt => {
                     if (opt.getAttribute('data-correct') === 'true') {
                         opt.classList.remove('selected');
@@ -2897,13 +3106,19 @@
                 question.classList.add('answered');
                 answeredQuestions++;
                 correctAnswers++;
-                updateScore();
+                checkCompletion();
             }
         }
 
-        function updateScore() {
+        function checkCompletion() {
+            if (answeredQuestions === totalQuestions) {
+                showResults();
+            }
+        }
+
+        function showResults() {
             const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
-            scoreElement.textContent = `Результат: ${percentage.toFixed(2)}%`;
+            modalScore.textContent = `${percentage.toFixed(2)}%`;
 
             let motivation;
             if (percentage === 100) {
@@ -2915,17 +3130,15 @@
             } else {
                 motivation = "Не сдавайтесь! Практика делает совершенство!";
             }
-            motivationElement.textContent = motivation;
+            modalMotivation.textContent = motivation;
+
+            modal.style.display = 'block';
         }
 
         function resetChapter() {
             const activeChapter = document.querySelector('.chapter.active');
             activeChapter.classList.remove('active');
             toc.classList.remove('hidden');
-            scoreElement.remove();
-            motivationElement.remove();
-            scoreElement = null;
-            motivationElement = null;
             correctAnswers = 0;
             answeredQuestions = 0;
             activeChapter.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
