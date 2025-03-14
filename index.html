@@ -3043,6 +3043,15 @@
             allSelectedQuestions.forEach((question, index) => {
                 const questionText = question.querySelector('p').textContent.split('. ').slice(1).join('. ');
                 question.querySelector('p').textContent = `${index + 1}. ${questionText}`;
+                
+                // Перемешивание вариантов ответов
+                const optionsList = question.querySelector('.options');
+                const options = Array.from(optionsList.children);
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    optionsList.appendChild(optionsList.removeChild(options[j]));
+                }
+
                 testChapter.appendChild(question);
             });
 
@@ -3061,9 +3070,21 @@
         });
 
         function initializeOptions(chapterId) {
-            document.querySelectorAll(`#${chapterId} .options li`).forEach(option => {
-                option.removeEventListener('click', handleOptionClick);
-                option.addEventListener('click', handleOptionClick);
+            document.querySelectorAll(`#${chapterId} .question`).forEach(question => {
+                const optionsList = question.querySelector('.options');
+                const options = Array.from(optionsList.children);
+                
+                // Перемешивание вариантов ответов
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    optionsList.appendChild(optionsList.removeChild(options[j]));
+                }
+
+                // Удаление и добавление обработчиков событий
+                options.forEach(option => {
+                    option.removeEventListener('click', handleOptionClick);
+                    option.addEventListener('click', handleOptionClick);
+                });
             });
         }
 
