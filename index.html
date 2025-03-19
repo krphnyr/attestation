@@ -2865,43 +2865,42 @@
         </div>
 
         <!-- Контейнер для теста аттестации -->
+        <div class="chapter" id="test-chapter"></div>
 
-    <div class="chapter" id="test-chapter"></div>
-        
-    <!-- Модальное окно результатов -->
-    <div class="modal" id="result-modal">
-        <div class="modal-content">
-            <h2>Результаты</h2>
-            <p><span class="score" id="modal-score">0%</span></p>
-            <p class="motivation" id="modal-motivation"></p>
-            <button id="close-modal">Закрыть</button>
+        <!-- Модальное окно результатов -->
+        <div class="modal" id="result-modal">
+            <div class="modal-content">
+                <h2>Результаты</h2>
+                <p><span class="score" id="modal-score">0%</span></p>
+                <p class="motivation" id="modal-motivation"></p>
+                <button id="close-modal">Закрыть</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Модальное окно выбора режима -->
-    <div class="modal" id="mode-modal">
-        <div class="modal-content">
-            <h2>Выберите режим прохождения</h2>
-            <button id="mode-intuition">Интуиция</button>
-            <button id="mode-blacklist">Чёрный список</button>
+        <!-- Модальное окно выбора режима -->
+        <div class="modal" id="mode-modal">
+            <div class="modal-content">
+                <h2>Выберите режим прохождения</h2>
+                <button id="mode-intuition">Интуиция</button>
+                <button id="mode-blacklist">Чёрный список</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Модальное окно чёрного списка -->
-    <div class="modal" id="blacklist-modal">
-        <div class="modal-content">
-            <h2>Составлен чёрный список</h2>
-            <p><span id="countdown">3</span></p>
+        <!-- Модальное окно чёрного списка -->
+        <div class="modal" id="blacklist-modal">
+            <div class="modal-content">
+                <h2>Составлен чёрный список</h2>
+                <p><span id="countdown">3</span></p>
+            </div>
         </div>
-    </div>
 
-    <!-- Модальное окно успешного прохождения чёрного списка -->
-    <div class="modal" id="blacklist-success-modal">
-        <div class="modal-content">
-            <h2>Чёрный список пуст!</h2>
-            <button id="close-blacklist-success">Закрыть</button>
+        <!-- Модальное окно успешного прохождения чёрного списка -->
+        <div class="modal" id="blacklist-success-modal">
+            <div class="modal-content">
+                <h2>Чёрный список пуст!</h2>
+                <button id="close-blacklist-success">Закрыть</button>
+            </div>
         </div>
-    </div>
 
     <script>
         let totalQuestions = 0;
@@ -2926,6 +2925,11 @@
         const blacklistSuccessModal = document.getElementById('blacklist-success-modal');
         const closeBlacklistSuccessBtn = document.getElementById('close-blacklist-success');
 
+        // Функция для прокрутки к элементу
+        function scrollToElement(element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         closeModalBtn.addEventListener('click', () => {
             resultModal.style.display = 'none';
             resetChapter();
@@ -2938,6 +2942,7 @@
 
         function showModeModal(callback) {
             modeModal.style.display = 'block';
+            scrollToElement(modeModal);
             modeIntuitionBtn.onclick = () => {
                 currentMode = 'intuition';
                 modeModal.style.display = 'none';
@@ -2971,8 +2976,9 @@
                     correctAnswers = 0;
                     answeredQuestions = 0;
                     incorrectQuestions = [];
-                    hasEnteredBlacklist = false; // Сбрасываем флаг при выборе новой главы
+                    hasEnteredBlacklist = false;
                     initializeOptions(chapterId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
                 });
             });
         });
@@ -3026,8 +3032,9 @@
                 correctAnswers = 0;
                 answeredQuestions = 0;
                 incorrectQuestions = [];
-                hasEnteredBlacklist = false; // Сбрасываем флаг при генерации теста
+                hasEnteredBlacklist = false;
                 initializeOptions('test-chapter');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
             });
         });
 
@@ -3107,7 +3114,7 @@
                             showResults();
                         }
                     } else {
-                        hasEnteredBlacklist = true; // Устанавливаем флаг, если переходим в чёрный список
+                        hasEnteredBlacklist = true;
                         showBlacklistModal();
                     }
                 }
@@ -3129,10 +3136,12 @@
             }
             modalMotivation.textContent = motivation;
             resultModal.style.display = 'block';
+            scrollToElement(resultModal);
         }
 
         function showBlacklistModal() {
             blacklistModal.style.display = 'block';
+            scrollToElement(blacklistModal);
             let countdown = 3;
             countdownElement.textContent = countdown;
 
@@ -3149,6 +3158,7 @@
 
         function showBlacklistSuccess() {
             blacklistSuccessModal.style.display = 'block';
+            scrollToElement(blacklistSuccessModal);
         }
 
         function generateBlacklistTest() {
@@ -3173,6 +3183,7 @@
             answeredQuestions = 0;
             incorrectQuestions = [];
             initializeOptions(currentChapterId);
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
         }
 
         function resetChapter() {
@@ -3182,7 +3193,7 @@
             correctAnswers = 0;
             answeredQuestions = 0;
             incorrectQuestions = [];
-            hasEnteredBlacklist = false; // Сбрасываем флаг при возвращении к оглавлению
+            hasEnteredBlacklist = false;
             currentChapterId = null;
             activeChapter.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
             activeChapter.querySelectorAll('.options li').forEach(opt => {
@@ -3190,6 +3201,7 @@
                 opt.style.pointerEvents = 'auto';
             });
             if (activeChapter.id === 'test-chapter') activeChapter.innerHTML = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало при возвращении к оглавлению
         }
     </script>
 </body>
