@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АТТЕСТАЦИОННЫЕ ВОПРОСЫ ПО ТЕМЕ ОТВОД И ТАКСАЦИЯ ЛЕСОСЕК</title>
-    <!-- Добавляем favicon в виде смайлика белки -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='0' y='14'>🐿️</text></svg>" type="image/svg+xml">
     <style>
         body {
@@ -13,7 +12,7 @@
             margin: 0;
             padding: 20px;
             color: #333;
-            overflow-x: hidden; /* Предотвращает горизонтальную прокрутку */
+            overflow-x: hidden;
         }
         .container {
             max-width: 900px;
@@ -24,7 +23,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
             width: 100%;
-            box-sizing: border-box; /* Учитывает padding в ширине */
+            box-sizing: border-box;
         }
         .container:hover {
             transform: translateY(-5px);
@@ -35,7 +34,7 @@
             font-size: 2em;
             margin-bottom: 25px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            word-wrap: break-word; /* Перенос длинных слов */
+            word-wrap: break-word;
         }
         #toc {
             margin-bottom: 20px;
@@ -131,7 +130,7 @@
         }
         .back-button, .generate-test {
             display: block;
-            margin: 20px auto; /* Центрирование кнопок */
+            margin: 20px auto;
             padding: 10px 25px;
             background: #00796b;
             color: white;
@@ -141,7 +140,7 @@
             font-size: 1em;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
-            width: fit-content; /* Адаптивная ширина */
+            width: fit-content;
         }
         .back-button:hover, .generate-test:hover {
             background: #009688;
@@ -153,7 +152,6 @@
             color: #333;
             box-shadow: 0 5px 15px rgba(255, 202, 40, 0.4);
         }
-        /* Стили для всплывающего окна */
         .modal {
             display: none;
             position: fixed;
@@ -202,7 +200,8 @@
             font-size: 1em;
         }
         .modal-content button {
-            margin-top: 20px;
+            display: block;
+            margin: 10px auto;
             padding: 10px 25px;
             background: #00796b;
             color: white;
@@ -212,10 +211,8 @@
             font-size: 1em;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
-            width: fit-content;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            width: 80%;
+            max-width: 300px;
         }
         .modal-content button:hover {
             background: #009688;
@@ -230,123 +227,38 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        /* Медиа-запросы для мобильных устройств */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            .container {
-                padding: 15px;
-                margin: 0;
-                max-width: 100%;
-            }
-            h1 {
-                font-size: 1.5em;
-                margin-bottom: 20px;
-            }
-            #toc h2 {
-                font-size: 1.3em;
-                margin-bottom: 10px;
-            }
-            #toc li {
-                padding: 10px;
-                margin: 5px 0;
-                font-size: 0.9em;
-            }
-            .question {
-                margin: 15px 0;
-                padding: 12px;
-            }
-            .question p {
-                font-size: 1em;
-                margin-bottom: 10px;
-            }
-            .options li {
-                padding: 10px;
-                margin: 5px 0;
-                font-size: 0.9em;
-            }
-            .back-button, .generate-test {
-                padding: 8px 20px;
-                font-size: 0.9em;
-                margin: 15px auto;
-            }
-            .modal-content {
-                padding: 15px;
-                max-width: 90%;
-            }
-            .modal-content h2 {
-                font-size: 1.5em;
-                margin-bottom: 10px;
-            }
-            .modal-content p {
-                font-size: 1em;
-            }
-            .modal-content .score {
-                font-size: 1.8em;
-            }
-            .modal-content .motivation {
-                font-size: 0.9em;
-            }
-            .modal-content button {
-                padding: 8px 20px;
-                font-size: 0.9em;
-                margin-top: 15px;
-            }
+            body { padding: 15px; }
+            .container { padding: 15px; margin: 0; max-width: 100%; }
+            h1 { font-size: 1.5em; margin-bottom: 20px; }
+            #toc h2 { font-size: 1.3em; margin-bottom: 10px; }
+            #toc li { padding: 10px; margin: 5px 0; font-size: 0.9em; }
+            .question { margin: 15px 0; padding: 12px; }
+            .question p { font-size: 1em; margin-bottom: 10px; }
+            .options li { padding: 10px; margin: 5px 0; font-size: 0.9em; }
+            .back-button, .generate-test { padding: 8px 20px; font-size: 0.9em; margin: 15px auto; }
+            .modal-content { padding: 15px; max-width: 90%; }
+            .modal-content h2 { font-size: 1.5em; margin-bottom: 10px; }
+            .modal-content p { font-size: 1em; }
+            .modal-content .score { font-size: 1.8em; }
+            .modal-content .motivation { font-size: 0.9em; }
+            .modal-content button { padding: 8px 20px; font-size: 0.9em; margin: 5px auto; width: 90%; }
         }
-
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 1.2em;
-                margin-bottom: 15px;
-            }
-            #toc h2 {
-                font-size: 1.1em;
-            }
-            #toc li {
-                padding: 8px;
-                font-size: 0.85em;
-            }
-            .question {
-                margin: 10px 0;
-                padding: 10px;
-            }
-            .question p {
-                font-size: 0.9em;
-                margin-bottom: 8px;
-            }
-            .options li {
-                padding: 8px;
-                font-size: 0.85em;
-            }
-            .back-button, .generate-test {
-                padding: 6px 15px;
-                font-size: 0.85em;
-                margin: 10px auto;
-            }
-            .modal-content {
-                padding: 10px;
-            }
-            .modal-content h2 {
-                font-size: 1.3em;
-            }
-            .modal-content .score {
-                font-size: 1.5em;
-            }
-            .modal-content .motivation {
-                font-size: 0.85em;
-            }
-            .modal-content button {
-                padding: 6px 15px;
-                font-size: 0.85em;
-            }
+            body { padding: 10px; }
+            .container { padding: 10px; }
+            h1 { font-size: 1.2em; margin-bottom: 15px; }
+            #toc h2 { font-size: 1.1em; }
+            #toc li { padding: 8px; font-size: 0.85em; }
+            .question { margin: 10px 0; padding: 10px; }
+            .question p { font-size: 0.9em; margin-bottom: 8px; }
+            .options li { padding: 8px; font-size: 0.85em; }
+            .back-button, .generate-test { padding: 6px 15px; font-size: 0.85em; margin: 10px auto; }
+            .modal-content { padding: 10px; }
+            .modal-content h2 { font-size: 1.3em; }
+            .modal-content .score { font-size: 1.5em; }
+            .modal-content .motivation { font-size: 0.85em; }
+            .modal-content button { padding: 6px 15px; font-size: 0.85em; margin: 5px auto; width: 90%; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
@@ -354,7 +266,6 @@
 <body>
     <div class="container">
         <h1>АТТЕСТАЦИОННЫЕ ВОПРОСЫ ПО ТЕМЕ ОТВОД И ТАКСАЦИЯ ЛЕСОСЕК</h1>
-
         <div id="toc">
             <h2>ОГЛАВЛЕНИЕ</h2>
             <ul>
@@ -2954,16 +2865,39 @@
         </div>
 
         <!-- Контейнер для теста аттестации -->
-        <div class="chapter" id="test-chapter"></div>
-    </div>
 
-    <!-- Всплывающее окно -->
+    <!-- Модальное окно результатов -->
     <div class="modal" id="result-modal">
         <div class="modal-content">
             <h2>Результаты</h2>
-            <p>Ваш результат: <span class="score" id="modal-score">0%</span></p>
+            <p><span class="score" id="modal-score">0%</span></p>
             <p class="motivation" id="modal-motivation"></p>
             <button id="close-modal">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно выбора режима -->
+    <div class="modal" id="mode-modal">
+        <div class="modal-content">
+            <h2>Выберите режим прохождения</h2>
+            <button id="mode-intuition">Интуиция</button>
+            <button id="mode-blacklist">Чёрный список</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно чёрного списка -->
+    <div class="modal" id="blacklist-modal">
+        <div class="modal-content">
+            <h2>Составлен чёрный список</h2>
+            <p><span id="countdown">3</span></p>
+        </div>
+    </div>
+
+    <!-- Модальное окно успешного прохождения чёрного списка -->
+    <div class="modal" id="blacklist-success-modal">
+        <div class="modal-content">
+            <h2>Чёрный список пуст!</h2>
+            <button id="close-blacklist-success">Закрыть</button>
         </div>
     </div>
 
@@ -2971,122 +2905,145 @@
         let totalQuestions = 0;
         let correctAnswers = 0;
         let answeredQuestions = 0;
+        let currentMode = null;
+        let incorrectQuestions = [];
+        let currentChapterId = null;
+        let hasEnteredBlacklist = false; // Флаг для отслеживания входа в режим чёрного списка
         const toc = document.getElementById('toc');
         const chapters = document.querySelectorAll('.chapter');
         const container = document.querySelector('.container');
-        const modal = document.getElementById('result-modal');
+        const resultModal = document.getElementById('result-modal');
         const modalScore = document.getElementById('modal-score');
         const modalMotivation = document.getElementById('modal-motivation');
         const closeModalBtn = document.getElementById('close-modal');
+        const modeModal = document.getElementById('mode-modal');
+        const modeIntuitionBtn = document.getElementById('mode-intuition');
+        const modeBlacklistBtn = document.getElementById('mode-blacklist');
+        const blacklistModal = document.getElementById('blacklist-modal');
+        const countdownElement = document.getElementById('countdown');
+        const blacklistSuccessModal = document.getElementById('blacklist-success-modal');
+        const closeBlacklistSuccessBtn = document.getElementById('close-blacklist-success');
 
-        // Закрытие модального окна и возврат к оглавлению
         closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
+            resultModal.style.display = 'none';
             resetChapter();
         });
 
-        // Инициализация оглавления
+        closeBlacklistSuccessBtn.addEventListener('click', () => {
+            blacklistSuccessModal.style.display = 'none';
+            resetChapter();
+        });
+
+        function showModeModal(callback) {
+            modeModal.style.display = 'block';
+            modeIntuitionBtn.onclick = () => {
+                currentMode = 'intuition';
+                modeModal.style.display = 'none';
+                callback();
+            };
+            modeBlacklistBtn.onclick = () => {
+                currentMode = 'blacklist';
+                modeModal.style.display = 'none';
+                callback();
+            };
+        }
+
         document.querySelectorAll('#toc li').forEach(item => {
             item.addEventListener('click', function() {
-                toc.classList.add('hidden');
-                const chapterId = this.getAttribute('data-chapter');
-                const chapter = document.getElementById(chapterId);
-                chapter.classList.add('active');
+                showModeModal(() => {
+                    toc.classList.add('hidden');
+                    const chapterId = this.getAttribute('data-chapter');
+                    currentChapterId = chapterId;
+                    const chapter = document.getElementById(chapterId);
+                    chapter.classList.add('active');
 
-                if (!chapter.querySelector('.back-button')) {
+                    if (!chapter.querySelector('.back-button')) {
+                        const backButton = document.createElement('button');
+                        backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
+                        backButton.classList.add('back-button');
+                        backButton.addEventListener('click', resetChapter);
+                        chapter.insertBefore(backButton, chapter.firstChild);
+                    }
+
+                    totalQuestions = chapter.querySelectorAll('.question').length;
+                    correctAnswers = 0;
+                    answeredQuestions = 0;
+                    incorrectQuestions = [];
+                    hasEnteredBlacklist = false; // Сбрасываем флаг при выборе новой главы
+                    initializeOptions(chapterId);
+                });
+            });
+        });
+
+        document.querySelector('.generate-test').addEventListener('click', function() {
+            showModeModal(() => {
+                toc.classList.add('hidden');
+                const testChapter = document.getElementById('test-chapter');
+                currentChapterId = 'test-chapter';
+                testChapter.innerHTML = '';
+                testChapter.classList.add('active');
+
+                const questionCounts = {
+                    'chapter-1-1': 3, 'chapter-1-2': 4, 'chapter-1-3': 2, 'chapter-1-4': 5,
+                    'chapter-1-5': 4, 'chapter-1-6': 4, 'chapter-1-7': 3, 'chapter-1-8': 3,
+                    'chapter-1-9': 2, 'chapter-1-10': 2, 'chapter-1-11': 2, 'chapter-1-12': 2,
+                    'chapter-1-13': 2, 'chapter-1-14': 2
+                };
+
+                let allSelectedQuestions = [];
+                for (const chapterId in questionCounts) {
+                    const questions = Array.from(document.querySelectorAll(`#${chapterId} .question`));
+                    const count = Math.min(questionCounts[chapterId], questions.length);
+                    const shuffled = questions.sort(() => 0.5 - Math.random());
+                    const selected = shuffled.slice(0, count).map(q => q.cloneNode(true));
+                    allSelectedQuestions = allSelectedQuestions.concat(selected);
+                }
+
+                allSelectedQuestions.sort(() => 0.5 - Math.random());
+                allSelectedQuestions.forEach((question, index) => {
+                    const questionText = question.querySelector('p').textContent.split('. ').slice(1).join('. ');
+                    question.querySelector('p').textContent = `${index + 1}. ${questionText}`;
+                    const optionsList = question.querySelector('.options');
+                    const options = Array.from(optionsList.children);
+                    for (let i = options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        optionsList.appendChild(optionsList.removeChild(options[j]));
+                    }
+                    testChapter.appendChild(question);
+                });
+
+                if (!testChapter.querySelector('.back-button')) {
                     const backButton = document.createElement('button');
                     backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
                     backButton.classList.add('back-button');
                     backButton.addEventListener('click', resetChapter);
-                    chapter.insertBefore(backButton, chapter.firstChild);
+                    testChapter.insertBefore(backButton, testChapter.firstChild);
                 }
 
-                totalQuestions = chapter.querySelectorAll('.question').length;
+                totalQuestions = allSelectedQuestions.length;
                 correctAnswers = 0;
                 answeredQuestions = 0;
-                initializeOptions(chapterId);
+                incorrectQuestions = [];
+                hasEnteredBlacklist = false; // Сбрасываем флаг при генерации теста
+                initializeOptions('test-chapter');
             });
-        });
-
-        // Обработчик для кнопки "СОСТАВИТЬ СПИСОК ВОПРОСОВ ДЛЯ АТТЕСТАЦИИ"
-        document.querySelector('.generate-test').addEventListener('click', function() {
-            toc.classList.add('hidden');
-            const testChapter = document.getElementById('test-chapter');
-            testChapter.innerHTML = '';
-            testChapter.classList.add('active');
-
-            const questionCounts = {
-                'chapter-1-1': 3,
-                'chapter-1-2': 4,
-                'chapter-1-3': 2,
-                'chapter-1-4': 5,
-                'chapter-1-5': 4,
-                'chapter-1-6': 4,
-                'chapter-1-7': 3,
-                'chapter-1-8': 3,
-                'chapter-1-9': 2,
-                'chapter-1-10': 2,
-                'chapter-1-11': 2,
-                'chapter-1-12': 2,
-                'chapter-1-13': 2,
-                'chapter-1-14': 2
-            };
-
-            let allSelectedQuestions = [];
-            for (const chapterId in questionCounts) {
-                const questions = Array.from(document.querySelectorAll(`#${chapterId} .question`));
-                const count = Math.min(questionCounts[chapterId], questions.length);
-                const shuffled = questions.sort(() => 0.5 - Math.random());
-                const selected = shuffled.slice(0, count).map(q => q.cloneNode(true));
-                allSelectedQuestions = allSelectedQuestions.concat(selected);
-            }
-
-            allSelectedQuestions.sort(() => 0.5 - Math.random());
-            allSelectedQuestions.forEach((question, index) => {
-                const questionText = question.querySelector('p').textContent.split('. ').slice(1).join('. ');
-                question.querySelector('p').textContent = `${index + 1}. ${questionText}`;
-                
-                // Перемешивание вариантов ответов
-                const optionsList = question.querySelector('.options');
-                const options = Array.from(optionsList.children);
-                for (let i = options.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    optionsList.appendChild(optionsList.removeChild(options[j]));
-                }
-
-                testChapter.appendChild(question);
-            });
-
-            if (!testChapter.querySelector('.back-button')) {
-                const backButton = document.createElement('button');
-                backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
-                backButton.classList.add('back-button');
-                backButton.addEventListener('click', resetChapter);
-                testChapter.insertBefore(backButton, testChapter.firstChild);
-            }
-
-            totalQuestions = allSelectedQuestions.length;
-            correctAnswers = 0;
-            answeredQuestions = 0;
-            initializeOptions('test-chapter');
         });
 
         function initializeOptions(chapterId) {
             document.querySelectorAll(`#${chapterId} .question`).forEach(question => {
+                question.classList.remove('answered');
                 const optionsList = question.querySelector('.options');
                 const options = Array.from(optionsList.children);
-                
-                // Перемешивание вариантов ответов
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                    opt.style.pointerEvents = 'auto';
+                    opt.removeEventListener('click', handleOptionClick);
+                    opt.addEventListener('click', handleOptionClick);
+                });
                 for (let i = options.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     optionsList.appendChild(optionsList.removeChild(options[j]));
                 }
-
-                // Удаление и добавление обработчиков событий
-                options.forEach(option => {
-                    option.removeEventListener('click', handleOptionClick);
-                    option.addEventListener('click', handleOptionClick);
-                });
             });
         }
 
@@ -3115,6 +3072,9 @@
                 this.classList.add('incorrect');
                 question.classList.add('answered');
                 answeredQuestions++;
+                if (currentMode === 'blacklist') {
+                    incorrectQuestions.push(question.cloneNode(true));
+                }
                 checkCompletion();
             } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
                 options.forEach(opt => {
@@ -3135,14 +3095,26 @@
 
         function checkCompletion() {
             if (answeredQuestions === totalQuestions) {
-                showResults();
+                if (currentMode === 'intuition') {
+                    showResults();
+                } else if (currentMode === 'blacklist') {
+                    if (incorrectQuestions.length === 0) {
+                        if (hasEnteredBlacklist) {
+                            showBlacklistSuccess();
+                        } else {
+                            showResults();
+                        }
+                    } else {
+                        hasEnteredBlacklist = true; // Устанавливаем флаг, если переходим в чёрный список
+                        showBlacklistModal();
+                    }
+                }
             }
         }
 
         function showResults() {
             const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
             modalScore.textContent = `${percentage.toFixed(2)}%`;
-
             let motivation;
             if (percentage === 100) {
                 motivation = "Превосходно! Вы настоящий эксперт!";
@@ -3154,8 +3126,51 @@
                 motivation = "Не сдавайтесь! Практика делает совершенство!";
             }
             modalMotivation.textContent = motivation;
+            resultModal.style.display = 'block';
+        }
 
-            modal.style.display = 'block';
+        function showBlacklistModal() {
+            blacklistModal.style.display = 'block';
+            let countdown = 3;
+            countdownElement.textContent = countdown;
+
+            const interval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    blacklistModal.style.display = 'none';
+                    generateBlacklistTest();
+                }
+            }, 1000);
+        }
+
+        function showBlacklistSuccess() {
+            blacklistSuccessModal.style.display = 'block';
+        }
+
+        function generateBlacklistTest() {
+            const currentChapter = document.getElementById(currentChapterId);
+            const backButton = currentChapter.querySelector('.back-button');
+            currentChapter.innerHTML = '';
+
+            if (backButton) {
+                currentChapter.appendChild(backButton.cloneNode(true));
+                currentChapter.querySelector('.back-button').addEventListener('click', resetChapter);
+            }
+
+            incorrectQuestions.forEach((question, index) => {
+                const newQuestion = question.cloneNode(true);
+                const questionText = newQuestion.querySelector('p').textContent.split('. ').slice(1).join('. ');
+                newQuestion.querySelector('p').textContent = `${index + 1}. ${questionText}`;
+                currentChapter.appendChild(newQuestion);
+            });
+
+            totalQuestions = incorrectQuestions.length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            incorrectQuestions = [];
+            initializeOptions(currentChapterId);
         }
 
         function resetChapter() {
@@ -3164,6 +3179,9 @@
             toc.classList.remove('hidden');
             correctAnswers = 0;
             answeredQuestions = 0;
+            incorrectQuestions = [];
+            hasEnteredBlacklist = false; // Сбрасываем флаг при возвращении к оглавлению
+            currentChapterId = null;
             activeChapter.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
             activeChapter.querySelectorAll('.options li').forEach(opt => {
                 opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
