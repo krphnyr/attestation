@@ -21,12 +21,14 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            transition: box-shadow 0.3s ease;
             width: 100%;
             box-sizing: border-box;
+            overflow: hidden; /* Ограничиваем анимацию внутри контейнера */
+            position: relative; /* Для корректного позиционирования дочерних элементов */
         }
         .container:hover {
-            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
         h1 {
             text-align: center;
@@ -79,6 +81,9 @@
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
+            position: relative; /* Для корректной работы анимации */
+            width: 100%; /* Убедимся, что вопрос не выходит за пределы */
+            box-sizing: border-box;
         }
         .question:hover {
             transform: translateY(-3px);
@@ -128,7 +133,7 @@
         .hidden {
             display: none;
         }
-        .back-button, .generate-test {
+        .back-button, .generate-test, .spartan-mode {
             display: block;
             margin: 20px auto;
             padding: 10px 25px;
@@ -142,10 +147,16 @@
             box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
             width: fit-content;
         }
-        .back-button:hover, .generate-test:hover {
+        .spartan-mode {
+            background: #b71c1c;
+        }
+        .back-button:hover, .generate-test:hover, .spartan-mode:hover {
             background: #009688;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 150, 136, 0.4);
+        }
+        .spartan-mode:hover {
+            background: #d32f2f;
         }
         .selected {
             background: #ffca28 !important;
@@ -227,6 +238,48 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        @keyframes slideOutLeft {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-100%); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .question.slide-out {
+            animation: slideOutLeft 0.5s ease forwards;
+        }
+        .question.slide-in {
+            animation: slideInRight 0.5s ease forwards;
+        }
+        #spartan-modal .modal-content {
+            background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%);
+            color: white;
+        }
+        #spartan-modal h2 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #spartan-modal .score {
+            color: #ffeb3b;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        #spartan-modal .motivation {
+            color: #ffeb3b;
+            font-style: normal;
+            font-weight: bold;
+        }
+        #spartan-modal button {
+            background: #ffeb3b;
+            color: #b71c1c;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        #spartan-modal button:hover {
+            background: #fff176;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
         @media (max-width: 768px) {
             body { padding: 15px; }
             .container { padding: 15px; margin: 0; max-width: 100%; }
@@ -236,7 +289,7 @@
             .question { margin: 15px 0; padding: 12px; }
             .question p { font-size: 1em; margin-bottom: 10px; }
             .options li { padding: 10px; margin: 5px 0; font-size: 0.9em; }
-            .back-button, .generate-test { padding: 8px 20px; font-size: 0.9em; margin: 15px auto; }
+            .back-button, .generate-test, .spartan-mode { padding: 8px 20px; font-size: 0.9em; margin: 15px auto; }
             .modal-content { padding: 15px; max-width: 90%; }
             .modal-content h2 { font-size: 1.5em; margin-bottom: 10px; }
             .modal-content p { font-size: 1em; }
@@ -253,7 +306,7 @@
             .question { margin: 10px 0; padding: 10px; }
             .question p { font-size: 0.9em; margin-bottom: 8px; }
             .options li { padding: 8px; font-size: 0.85em; }
-            .back-button, .generate-test { padding: 6px 15px; font-size: 0.85em; margin: 10px auto; }
+            .back-button, .generate-test, .spartan-mode { padding: 6px 15px; font-size: 0.85em; margin: 10px auto; }
             .modal-content { padding: 10px; }
             .modal-content h2 { font-size: 1.3em; }
             .modal-content .score { font-size: 1.5em; }
@@ -285,6 +338,7 @@
                 <li data-chapter="chapter-1-14">1.14 Правила пожарной безопасности в лесах</li>
             </ul>
             <button class="generate-test">СОСТАВИТЬ СПИСОК ВОПРОСОВ ДЛЯ АТТЕСТАЦИИ</button>
+            <button class="spartan-mode">300 СПАРТАНЦЕВ</button>
         </div>
 
         <!-- Глава 1.1 -->
@@ -2867,6 +2921,9 @@
         <!-- Контейнер для теста аттестации -->
         <div class="chapter" id="test-chapter"></div>
 
+        <!-- Контейнер для режима "300 Спартанцев" -->
+        <div class="chapter" id="spartan-chapter"></div>
+
         <!-- Модальное окно результатов -->
         <div class="modal" id="result-modal">
             <div class="modal-content">
@@ -2883,6 +2940,7 @@
                 <h2>Режимы прохождения</h2>
                 <button id="mode-intuition">Интуиция</button>
                 <button id="mode-blacklist">Чёрный список</button>
+                <button id="close-mode-modal">Закрыть</button>
             </div>
         </div>
 
@@ -2902,6 +2960,16 @@
             </div>
         </div>
 
+        <!-- Модальное окно для режима "300 Спартанцев" -->
+        <div class="modal" id="spartan-modal">
+            <div class="modal-content">
+                <h2>Слава Спарте!</h2>
+                <p><span class="score" id="spartan-score">0%</span></p>
+                <p class="motivation" id="spartan-motivation"></p>
+                <button id="close-spartan-modal">Вернуться к оглавлению</button>
+            </div>
+        </div>
+
     <script>
         let totalQuestions = 0;
         let correctAnswers = 0;
@@ -2909,7 +2977,9 @@
         let currentMode = null;
         let incorrectQuestions = [];
         let currentChapterId = null;
-        let hasEnteredBlacklist = false; // Флаг для отслеживания входа в режим чёрного списка
+        let hasEnteredBlacklist = false;
+        let spartanQuestions = [];
+        let currentSpartanIndex = 0;
         const toc = document.getElementById('toc');
         const chapters = document.querySelectorAll('.chapter');
         const container = document.querySelector('.container');
@@ -2920,12 +2990,24 @@
         const modeModal = document.getElementById('mode-modal');
         const modeIntuitionBtn = document.getElementById('mode-intuition');
         const modeBlacklistBtn = document.getElementById('mode-blacklist');
+        const closeModeModalBtn = document.getElementById('close-mode-modal');
         const blacklistModal = document.getElementById('blacklist-modal');
         const countdownElement = document.getElementById('countdown');
         const blacklistSuccessModal = document.getElementById('blacklist-success-modal');
         const closeBlacklistSuccessBtn = document.getElementById('close-blacklist-success');
+        const spartanModal = document.getElementById('spartan-modal');
+        const spartanScore = document.getElementById('spartan-score');
+        const spartanMotivation = document.getElementById('spartan-motivation');
+        const closeSpartanModalBtn = document.getElementById('close-spartan-modal');
 
-        // Функция для прокрутки к элементу
+        // Хранилище исходных вопросов для каждой главы
+        const originalChaptersContent = {};
+        chapters.forEach(chapter => {
+            if (chapter.id !== 'test-chapter' && chapter.id !== 'spartan-chapter') {
+                originalChaptersContent[chapter.id] = chapter.cloneNode(true);
+            }
+        });
+
         function scrollToElement(element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -2935,8 +3017,17 @@
             resetChapter();
         });
 
+        closeModeModalBtn.addEventListener('click', () => {
+            modeModal.style.display = 'none';
+        });
+
         closeBlacklistSuccessBtn.addEventListener('click', () => {
             blacklistSuccessModal.style.display = 'none';
+            resetChapter();
+        });
+
+        closeSpartanModalBtn.addEventListener('click', () => {
+            spartanModal.style.display = 'none';
             resetChapter();
         });
 
@@ -2978,7 +3069,7 @@
                     incorrectQuestions = [];
                     hasEnteredBlacklist = false;
                     initializeOptions(chapterId);
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
         });
@@ -3034,9 +3125,143 @@
                 incorrectQuestions = [];
                 hasEnteredBlacklist = false;
                 initializeOptions('test-chapter');
-                window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
+
+        // Логика для режима "300 Спартанцев"
+        document.querySelector('.spartan-mode').addEventListener('click', function() {
+            toc.classList.add('hidden');
+            const spartanChapter = document.getElementById('spartan-chapter');
+            currentChapterId = 'spartan-chapter';
+            spartanChapter.innerHTML = '';
+            spartanChapter.classList.add('active');
+
+            // Собираем все вопросы из всех глав
+            spartanQuestions = [];
+            for (const chapterId in originalChaptersContent) {
+                const questions = Array.from(originalChaptersContent[chapterId].querySelectorAll('.question'));
+                spartanQuestions = spartanQuestions.concat(questions.map(q => q.cloneNode(true)));
+            }
+
+            // Перемешиваем вопросы
+            spartanQuestions.sort(() => 0.5 - Math.random());
+            totalQuestions = spartanQuestions.length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            currentSpartanIndex = 0;
+
+            // Добавляем кнопку "Назад"
+            const backButton = document.createElement('button');
+            backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
+            backButton.classList.add('back-button');
+            backButton.addEventListener('click', resetChapter);
+            spartanChapter.appendChild(backButton);
+
+            // Показываем первый вопрос
+            showSpartanQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function showSpartanQuestion() {
+            const spartanChapter = document.getElementById('spartan-chapter');
+            const currentQuestion = spartanChapter.querySelector('.question');
+
+            // Удаляем текущий вопрос, если он есть
+            if (currentQuestion) {
+                currentQuestion.classList.add('slide-out');
+                setTimeout(() => {
+                    currentQuestion.remove();
+                }, 500); // Даем анимации завершиться
+            }
+
+            // Показываем следующий вопрос
+            setTimeout(() => {
+                if (currentSpartanIndex < spartanQuestions.length) {
+                    const question = spartanQuestions[currentSpartanIndex].cloneNode(true);
+                    question.querySelector('p').textContent = `${currentSpartanIndex + 1}. ${question.querySelector('p').textContent.split('. ').slice(1).join('. ')}`;
+                    const optionsList = question.querySelector('.options');
+                    const options = Array.from(optionsList.children);
+                    for (let i = options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        optionsList.appendChild(optionsList.removeChild(options[j]));
+                    }
+                    options.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                        opt.style.pointerEvents = 'auto';
+                        opt.removeEventListener('click', handleSpartanOptionClick);
+                        opt.addEventListener('click', handleSpartanOptionClick);
+                    });
+                    question.classList.add('slide-in');
+                    spartanChapter.appendChild(question);
+                } else {
+                    showSpartanResults();
+                }
+            }, currentQuestion ? 500 : 0); // Если есть текущий вопрос, ждем завершения анимации
+        }
+
+        function handleSpartanOptionClick() {
+            const question = this.closest('.question');
+            const options = question.querySelectorAll('.options li');
+
+            if (question.classList.contains('answered')) return;
+
+            const isCorrect = this.getAttribute('data-correct') === 'true';
+            const selectedOptions = Array.from(options).filter(opt => opt.classList.contains('selected'));
+
+            if (!this.classList.contains('selected')) {
+                this.classList.add('selected');
+                selectedOptions.push(this);
+            }
+
+            const totalCorrect = Array.from(options).filter(opt => opt.getAttribute('data-correct') === 'true').length;
+
+            if (!isCorrect) {
+                options.forEach(opt => {
+                    if (opt !== this) opt.classList.add('hidden');
+                    opt.style.pointerEvents = 'none';
+                });
+                this.classList.remove('selected');
+                this.classList.add('incorrect');
+                question.classList.add('answered');
+                answeredQuestions++;
+                currentSpartanIndex++;
+                showSpartanQuestion(); // Автоматический переход к следующему вопросу
+            } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
+                options.forEach(opt => {
+                    if (opt.getAttribute('data-correct') === 'true') {
+                        opt.classList.remove('selected');
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('hidden');
+                    }
+                    opt.style.pointerEvents = 'none';
+                });
+                question.classList.add('answered');
+                answeredQuestions++;
+                correctAnswers++;
+                currentSpartanIndex++;
+                showSpartanQuestion(); // Автоматический переход к следующему вопросу
+            }
+        }
+
+        function showSpartanResults() {
+            const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+            spartanScore.textContent = `${percentage.toFixed(2)}%`;
+            let motivation;
+            if (percentage === 100) {
+                motivation = "Ты настоящий спартанец! Победа за тобой!";
+            } else if (percentage >= 80) {
+                motivation = "Отличный бой! Ты почти достиг вершины!";
+            } else if (percentage >= 60) {
+                motivation = "Хорошая попытка! Продолжай сражаться!";
+            } else {
+                motivation = "Спарта не сдается! Тренируйся и возвращайся!";
+            }
+            spartanMotivation.textContent = motivation;
+            spartanModal.style.display = 'block';
+            scrollToElement(spartanModal);
+        }
 
         function initializeOptions(chapterId) {
             document.querySelectorAll(`#${chapterId} .question`).forEach(question => {
@@ -3163,45 +3388,59 @@
 
         function generateBlacklistTest() {
             const currentChapter = document.getElementById(currentChapterId);
-            const backButton = currentChapter.querySelector('.back-button');
-            currentChapter.innerHTML = '';
+            const tempChapter = document.createElement('div');
+            tempChapter.classList.add('chapter', 'active');
+            tempChapter.id = 'temp-blacklist-chapter';
 
-            if (backButton) {
-                currentChapter.appendChild(backButton.cloneNode(true));
-                currentChapter.querySelector('.back-button').addEventListener('click', resetChapter);
-            }
+            const backButton = document.createElement('button');
+            backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
+            backButton.classList.add('back-button');
+            backButton.addEventListener('click', resetChapter);
+            tempChapter.appendChild(backButton);
 
             incorrectQuestions.forEach((question, index) => {
                 const newQuestion = question.cloneNode(true);
                 const questionText = newQuestion.querySelector('p').textContent.split('. ').slice(1).join('. ');
                 newQuestion.querySelector('p').textContent = `${index + 1}. ${questionText}`;
-                currentChapter.appendChild(newQuestion);
+                tempChapter.appendChild(newQuestion);
             });
+
+            currentChapter.classList.remove('active');
+            container.appendChild(tempChapter);
+            currentChapterId = 'temp-blacklist-chapter';
 
             totalQuestions = incorrectQuestions.length;
             correctAnswers = 0;
             answeredQuestions = 0;
             incorrectQuestions = [];
-            initializeOptions(currentChapterId);
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало страницы
+            initializeOptions('temp-blacklist-chapter');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetChapter() {
             const activeChapter = document.querySelector('.chapter.active');
-            activeChapter.classList.remove('active');
+            if (activeChapter) {
+                activeChapter.classList.remove('active');
+                if (activeChapter.id === 'temp-blacklist-chapter') {
+                    container.removeChild(activeChapter);
+                    const originalChapter = document.getElementById(currentChapterId.replace('temp-blacklist-', ''));
+                    if (originalChapter) originalChapter.classList.add('active');
+                } else if (activeChapter.id !== 'test-chapter' && activeChapter.id !== 'spartan-chapter') {
+                    const originalContent = originalChaptersContent[activeChapter.id];
+                    activeChapter.innerHTML = originalContent.innerHTML;
+                } else {
+                    activeChapter.innerHTML = '';
+                }
+            }
             toc.classList.remove('hidden');
             correctAnswers = 0;
             answeredQuestions = 0;
             incorrectQuestions = [];
             hasEnteredBlacklist = false;
             currentChapterId = null;
-            activeChapter.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
-            activeChapter.querySelectorAll('.options li').forEach(opt => {
-                opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
-                opt.style.pointerEvents = 'auto';
-            });
-            if (activeChapter.id === 'test-chapter') activeChapter.innerHTML = '';
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка в начало при возвращении к оглавлению
+            spartanQuestions = [];
+            currentSpartanIndex = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
