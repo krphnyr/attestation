@@ -24,8 +24,8 @@
             transition: box-shadow 0.3s ease;
             width: 100%;
             box-sizing: border-box;
-            overflow: hidden; /* Ограничиваем анимацию внутри контейнера */
-            position: relative; /* Для корректного позиционирования дочерних элементов */
+            overflow: hidden;
+            position: relative;
         }
         .container:hover {
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
@@ -81,8 +81,8 @@
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
-            position: relative; /* Для корректной работы анимации */
-            width: 100%; /* Убедимся, что вопрос не выходит за пределы */
+            position: relative;
+            width: 100%;
             box-sizing: border-box;
         }
         .question:hover {
@@ -224,6 +224,8 @@
             box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
             width: 80%;
             max-width: 300px;
+            position: relative;
+            z-index: 1;
         }
         .modal-content button:hover {
             background: #009688;
@@ -252,33 +254,207 @@
         .question.slide-in {
             animation: slideInRight 0.5s ease forwards;
         }
-        #spartan-modal .modal-content {
-            background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%);
-            color: white;
+        /* Стиль для модальных окон в режиме "300 Спартанцев" */
+        .spartan-modal-style .modal-content {
+            background: linear-gradient(135deg, #8b0000 0%, #ff4500 100%);
+            color: #fff;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 69, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
-        #spartan-modal h2 {
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        .spartan-modal-style .modal-content::before {
+            content: '🛡️⚔️';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
         }
-        #spartan-modal .score {
-            color: #ffeb3b;
+        .spartan-modal-style .modal-content::after {
+            content: '⚔️⛑️';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        @keyframes glow {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.6; }
+        }
+        .spartan-modal-style h2 {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .spartan-modal-style .score {
+            color: #ffd700;
             font-size: 2.5em;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
-        #spartan-modal .motivation {
-            color: #ffeb3b;
+        .spartan-modal-style .motivation {
+            color: #fff;
             font-style: normal;
             font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        #spartan-modal button {
-            background: #ffeb3b;
-            color: #b71c1c;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        .spartan-modal-style button {
+            background: #ffd700;
+            color: #8b0000;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        #spartan-modal button:hover {
-            background: #fff176;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        .spartan-modal-style button:hover {
+            background: #ffec80;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        /* Стиль для модальных окон в режиме "Составить список вопросов для аттестации" (не пройдено) */
+        .test-fail-modal-style .modal-content {
+            background: linear-gradient(135deg, #ef5350 0%, #b71c1c 100%);
+            color: #fff;
+            border: 4px solid #d32f2f;
+            box-shadow: 0 0 25px rgba(211, 47, 47, 0.5), 0 0 50px rgba(239, 83, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .test-fail-modal-style .modal-content::before {
+            content: '🌧️🍂';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        .test-fail-modal-style .modal-content::after {
+            content: '🍂😓';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .test-fail-modal-style h2 {
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .test-fail-modal-style .score {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .test-fail-modal-style .motivation {
+            color: #fff;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .test-fail-modal-style button {
+            background: #d32f2f;
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .test-fail-modal-style button:hover {
+            background: #ef5350;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        /* Стиль для модальных окон в режиме "Составить список вопросов для аттестации" (пройдено) */
+        .test-pass-modal-style .modal-content {
+            background: linear-gradient(135deg, #81c784 0%, #388e3c 100%);
+            color: #fff;
+            border: 4px solid #4caf50;
+            box-shadow: 0 0 25px rgba(76, 175, 80, 0.7), 0 0 50px rgba(129, 199, 132, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .test-pass-modal-style .modal-content::before {
+            content: '🌞🌟';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        .test-pass-modal-style .modal-content::after {
+            content: '🌟🌳';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .test-pass-modal-style h2 {
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .test-pass-modal-style .score {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .test-pass-modal-style .motivation {
+            color: #fff;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .test-pass-modal-style button {
+            background: #4caf50;
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .test-pass-modal-style button:hover {
+            background: #66bb6a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        /* Прогресс-бар */
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 30px;
+            background-color: #00796b;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 25px;
         }
         @media (max-width: 768px) {
             body { padding: 15px; }
@@ -296,6 +472,16 @@
             .modal-content .score { font-size: 1.8em; }
             .modal-content .motivation { font-size: 0.9em; }
             .modal-content button { padding: 8px 20px; font-size: 0.9em; margin: 5px auto; width: 90%; }
+            .progress-container { margin: 15px 0; }
+            .progress-bar { height: 25px; }
+            .spartan-modal-style h2 { font-size: 1.6em; }
+            .spartan-modal-style .score { font-size: 2em; }
+            .spartan-modal-style .motivation { font-size: 1em; }
+            .spartan-modal-style button { padding: 10px 25px; font-size: 1em; }
+            .test-fail-modal-style h2, .test-pass-modal-style h2 { font-size: 1.6em; }
+            .test-fail-modal-style .score, .test-pass-modal-style .score { font-size: 2em; }
+            .test-fail-modal-style .motivation, .test-pass-modal-style .motivation { font-size: 1em; }
+            .test-fail-modal-style button, .test-pass-modal-style button { padding: 10px 25px; font-size: 1em; }
         }
         @media (max-width: 480px) {
             body { padding: 10px; }
@@ -312,6 +498,16 @@
             .modal-content .score { font-size: 1.5em; }
             .modal-content .motivation { font-size: 0.85em; }
             .modal-content button { padding: 6px 15px; font-size: 0.85em; margin: 5px auto; width: 90%; }
+            .progress-container { margin: 10px 0; }
+            .progress-bar { height: 20px; }
+            .spartan-modal-style h2 { font-size: 1.4em; }
+            .spartan-modal-style .score { font-size: 1.8em; }
+            .spartan-modal-style .motivation { font-size: 0.9em; }
+            .spartan-modal-style button { padding: 8px 20px; font-size: 0.9em; }
+            .test-fail-modal-style h2, .test-pass-modal-style h2 { font-size: 1.4em; }
+            .test-fail-modal-style .score, .test-pass-modal-style .score { font-size: 1.8em; }
+            .test-fail-modal-style .motivation, .test-pass-modal-style .motivation { font-size: 0.9em; }
+            .test-fail-modal-style button, .test-pass-modal-style button { padding: 8px 20px; font-size: 0.9em; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
@@ -2924,7 +3120,7 @@
         <!-- Контейнер для режима "300 Спартанцев" -->
         <div class="chapter" id="spartan-chapter"></div>
 
-        <!-- Модальное окно результатов -->
+        <!-- Модальное окно результатов (для других режимов) -->
         <div class="modal" id="result-modal">
             <div class="modal-content">
                 <h2>Результаты</h2>
@@ -2960,13 +3156,52 @@
             </div>
         </div>
 
-        <!-- Модальное окно для режима "300 Спартанцев" -->
-        <div class="modal" id="spartan-modal">
+        <!-- Модальное окно для режима "300 Спартанцев" (промежуточный результат) -->
+        <div class="modal spartan-modal-style" id="spartan-intermediate-modal">
             <div class="modal-content">
-                <h2>Слава Спарте!</h2>
-                <p><span class="score" id="spartan-score">0%</span></p>
-                <p class="motivation" id="spartan-motivation"></p>
-                <button id="close-spartan-modal">Вернуться к оглавлению</button>
+                <h2>Слава Спарте! ⚔️</h2>
+                <p><span class="score" id="spartan-intermediate-score">0%</span></p>
+                <p class="motivation" id="spartan-intermediate-motivation"></p>
+                <button id="close-spartan-intermediate-modal">Завершить сражение</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для режима "300 Спартанцев" (100% результат) -->
+        <div class="modal spartan-modal-style" id="spartan-perfect-modal">
+            <div class="modal-content">
+                <h2>Легенда Спарты! 🏆</h2>
+                <p><span class="score" id="spartan-perfect-score">100%</span></p>
+                <p class="motivation" id="spartan-perfect-motivation"></p>
+                <button id="close-spartan-perfect-modal">Завершить сражение</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для режима "300 Спартанцев" (провал >51% ошибок) -->
+        <div class="modal spartan-modal-style" id="spartan-fail-modal">
+            <div class="modal-content">
+                <h2>Поражение! 💀</h2>
+                <p class="motivation" id="spartan-fail-motivation"></p>
+                <button id="close-spartan-fail-modal">Завершить сражение</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для режима "Составить список вопросов для аттестации" (не пройдено) -->
+        <div class="modal test-fail-modal-style" id="test-fail-modal">
+            <div class="modal-content">
+                <h2>Аттестация не пройдена! 🌧️</h2>
+                <p><span class="score" id="test-fail-score">0%</span></p>
+                <p class="motivation" id="test-fail-motivation">Лес знаний оказался слишком густым! Не отчаивайся, попробуй снова! 🍂😓</p>
+                <button id="close-test-fail-modal">Закрыть</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для режима "Составить список вопросов для аттестации" (пройдено) -->
+        <div class="modal test-pass-modal-style" id="test-pass-modal">
+            <div class="modal-content">
+                <h2>Аттестация пройдена! 🌟</h2>
+                <p><span class="score" id="test-pass-score">0%</span></p>
+                <p class="motivation" id="test-pass-motivation">Ты настоящий лесной мастер! Знания расцвели, как весенний лес! 🌳🎉</p>
+                <button id="close-test-pass-modal">Закрыть</button>
             </div>
         </div>
 
@@ -2980,6 +3215,8 @@
         let hasEnteredBlacklist = false;
         let spartanQuestions = [];
         let currentSpartanIndex = 0;
+        let testQuestions = [];
+        let currentTestIndex = 0;
         const toc = document.getElementById('toc');
         const chapters = document.querySelectorAll('.chapter');
         const container = document.querySelector('.container');
@@ -2995,10 +3232,25 @@
         const countdownElement = document.getElementById('countdown');
         const blacklistSuccessModal = document.getElementById('blacklist-success-modal');
         const closeBlacklistSuccessBtn = document.getElementById('close-blacklist-success');
-        const spartanModal = document.getElementById('spartan-modal');
-        const spartanScore = document.getElementById('spartan-score');
-        const spartanMotivation = document.getElementById('spartan-motivation');
-        const closeSpartanModalBtn = document.getElementById('close-spartan-modal');
+        const spartanIntermediateModal = document.getElementById('spartan-intermediate-modal');
+        const spartanIntermediateScore = document.getElementById('spartan-intermediate-score');
+        const spartanIntermediateMotivation = document.getElementById('spartan-intermediate-motivation');
+        const closeSpartanIntermediateModalBtn = document.getElementById('close-spartan-intermediate-modal');
+        const spartanPerfectModal = document.getElementById('spartan-perfect-modal');
+        const spartanPerfectScore = document.getElementById('spartan-perfect-score');
+        const spartanPerfectMotivation = document.getElementById('spartan-perfect-motivation');
+        const closeSpartanPerfectModalBtn = document.getElementById('close-spartan-perfect-modal');
+        const spartanFailModal = document.getElementById('spartan-fail-modal');
+        const spartanFailMotivation = document.getElementById('spartan-fail-motivation');
+        const closeSpartanFailModalBtn = document.getElementById('close-spartan-fail-modal');
+        const testFailModal = document.getElementById('test-fail-modal');
+        const testFailScore = document.getElementById('test-fail-score');
+        const testFailMotivation = document.getElementById('test-fail-motivation');
+        const closeTestFailModalBtn = document.getElementById('close-test-fail-modal');
+        const testPassModal = document.getElementById('test-pass-modal');
+        const testPassScore = document.getElementById('test-pass-score');
+        const testPassMotivation = document.getElementById('test-pass-motivation');
+        const closeTestPassModalBtn = document.getElementById('close-test-pass-modal');
 
         // Хранилище исходных вопросов для каждой главы
         const originalChaptersContent = {};
@@ -3026,8 +3278,28 @@
             resetChapter();
         });
 
-        closeSpartanModalBtn.addEventListener('click', () => {
-            spartanModal.style.display = 'none';
+        closeSpartanIntermediateModalBtn.addEventListener('click', () => {
+            spartanIntermediateModal.style.display = 'none';
+            resetChapter();
+        });
+
+        closeSpartanPerfectModalBtn.addEventListener('click', () => {
+            spartanPerfectModal.style.display = 'none';
+            resetChapter();
+        });
+
+        closeSpartanFailModalBtn.addEventListener('click', () => {
+            spartanFailModal.style.display = 'none';
+            resetChapter();
+        });
+
+        closeTestFailModalBtn.addEventListener('click', () => {
+            testFailModal.style.display = 'none';
+            resetChapter();
+        });
+
+        closeTestPassModalBtn.addEventListener('click', () => {
+            testPassModal.style.display = 'none';
             resetChapter();
         });
 
@@ -3075,59 +3347,164 @@
         });
 
         document.querySelector('.generate-test').addEventListener('click', function() {
-            showModeModal(() => {
-                toc.classList.add('hidden');
-                const testChapter = document.getElementById('test-chapter');
-                currentChapterId = 'test-chapter';
-                testChapter.innerHTML = '';
-                testChapter.classList.add('active');
+            // Устанавливаем режим "intuition" по умолчанию, без показа модального окна
+            currentMode = 'intuition';
+            toc.classList.add('hidden');
+            const testChapter = document.getElementById('test-chapter');
+            currentChapterId = 'test-chapter';
+            testChapter.innerHTML = '';
+            testChapter.classList.add('active');
 
-                const questionCounts = {
-                    'chapter-1-1': 3, 'chapter-1-2': 4, 'chapter-1-3': 2, 'chapter-1-4': 5,
-                    'chapter-1-5': 4, 'chapter-1-6': 4, 'chapter-1-7': 3, 'chapter-1-8': 3,
-                    'chapter-1-9': 2, 'chapter-1-10': 2, 'chapter-1-11': 2, 'chapter-1-12': 2,
-                    'chapter-1-13': 2, 'chapter-1-14': 2
-                };
+            const questionCounts = {
+                'chapter-1-1': 3, 'chapter-1-2': 4, 'chapter-1-3': 2, 'chapter-1-4': 5,
+                'chapter-1-5': 4, 'chapter-1-6': 4, 'chapter-1-7': 3, 'chapter-1-8': 3,
+                'chapter-1-9': 2, 'chapter-1-10': 2, 'chapter-1-11': 2, 'chapter-1-12': 2,
+                'chapter-1-13': 2, 'chapter-1-14': 2
+            };
 
-                let allSelectedQuestions = [];
-                for (const chapterId in questionCounts) {
-                    const questions = Array.from(document.querySelectorAll(`#${chapterId} .question`));
-                    const count = Math.min(questionCounts[chapterId], questions.length);
-                    const shuffled = questions.sort(() => 0.5 - Math.random());
-                    const selected = shuffled.slice(0, count).map(q => q.cloneNode(true));
-                    allSelectedQuestions = allSelectedQuestions.concat(selected);
-                }
+            testQuestions = [];
+            for (const chapterId in questionCounts) {
+                const questions = Array.from(document.querySelectorAll(`#${chapterId} .question`));
+                const count = Math.min(questionCounts[chapterId], questions.length);
+                const shuffled = questions.sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, count).map(q => q.cloneNode(true));
+                testQuestions = testQuestions.concat(selected);
+            }
 
-                allSelectedQuestions.sort(() => 0.5 - Math.random());
-                allSelectedQuestions.forEach((question, index) => {
-                    const questionText = question.querySelector('p').textContent.split('. ').slice(1).join('. ');
-                    question.querySelector('p').textContent = `${index + 1}. ${questionText}`;
+            testQuestions.sort(() => 0.5 - Math.random());
+            totalQuestions = testQuestions.length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            currentTestIndex = 0;
+
+            // Добавляем прогресс-бар вместо кнопки "Вернуться к оглавлению"
+            const progressContainer = document.createElement('div');
+            progressContainer.classList.add('progress-container');
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+            progressBar.id = 'test-progress';
+            progressContainer.appendChild(progressBar);
+            testChapter.appendChild(progressContainer);
+
+            // Показываем первый вопрос
+            showTestQuestion();
+            updateTestProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function updateTestProgressBar() {
+            const progressBar = document.getElementById('test-progress');
+            const percentage = (currentTestIndex / totalQuestions) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        function showTestQuestion() {
+            const testChapter = document.getElementById('test-chapter');
+            const currentQuestion = testChapter.querySelector('.question');
+
+            // Удаляем текущий вопрос, только если есть следующий вопрос
+            if (currentQuestion && currentTestIndex < testQuestions.length) {
+                currentQuestion.classList.add('slide-out');
+                setTimeout(() => {
+                    currentQuestion.remove();
+                }, 500); // Даем анимации завершиться
+            }
+
+            // Показываем следующий вопрос
+            setTimeout(() => {
+                if (currentTestIndex < testQuestions.length) {
+                    const question = testQuestions[currentTestIndex].cloneNode(true);
+                    question.querySelector('p').textContent = `${currentTestIndex + 1}. ${question.querySelector('p').textContent.split('. ').slice(1).join('. ')}`;
                     const optionsList = question.querySelector('.options');
                     const options = Array.from(optionsList.children);
                     for (let i = options.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         optionsList.appendChild(optionsList.removeChild(options[j]));
                     }
+                    options.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                        opt.style.pointerEvents = 'auto';
+                        opt.removeEventListener('click', handleTestOptionClick);
+                        opt.addEventListener('click', handleTestOptionClick);
+                    });
+                    question.classList.add('slide-in');
                     testChapter.appendChild(question);
-                });
-
-                if (!testChapter.querySelector('.back-button')) {
-                    const backButton = document.createElement('button');
-                    backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
-                    backButton.classList.add('back-button');
-                    backButton.addEventListener('click', resetChapter);
-                    testChapter.insertBefore(backButton, testChapter.firstChild);
                 }
+            }, currentQuestion && currentTestIndex < testQuestions.length ? 500 : 0); // Если есть текущий вопрос и следующий, ждем завершения анимации
+        }
 
-                totalQuestions = allSelectedQuestions.length;
-                correctAnswers = 0;
-                answeredQuestions = 0;
-                incorrectQuestions = [];
-                hasEnteredBlacklist = false;
-                initializeOptions('test-chapter');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
+        function handleTestOptionClick() {
+            const question = this.closest('.question');
+            const options = question.querySelectorAll('.options li');
+
+            if (question.classList.contains('answered')) return;
+
+            const isCorrect = this.getAttribute('data-correct') === 'true';
+            const selectedOptions = Array.from(options).filter(opt => opt.classList.contains('selected'));
+
+            if (!this.classList.contains('selected')) {
+                this.classList.add('selected');
+                selectedOptions.push(this);
+            }
+
+            const totalCorrect = Array.from(options).filter(opt => opt.getAttribute('data-correct') === 'true').length;
+
+            if (!isCorrect) {
+                options.forEach(opt => {
+                    if (opt !== this) opt.classList.add('hidden');
+                    opt.style.pointerEvents = 'none';
+                });
+                this.classList.remove('selected');
+                this.classList.add('incorrect');
+                question.classList.add('answered');
+                answeredQuestions++;
+                if (currentMode === 'blacklist') {
+                    incorrectQuestions.push(question.cloneNode(true));
+                }
+                currentTestIndex++;
+                updateTestProgressBar();
+                if (currentTestIndex < testQuestions.length) {
+                    showTestQuestion(); // Показываем следующий вопрос, если он есть
+                } else {
+                    showTestResults(); // Показываем результаты, если это последний вопрос
+                }
+            } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
+                options.forEach(opt => {
+                    if (opt.getAttribute('data-correct') === 'true') {
+                        opt.classList.remove('selected');
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('hidden');
+                    }
+                    opt.style.pointerEvents = 'none';
+                });
+                question.classList.add('answered');
+                answeredQuestions++;
+                correctAnswers++;
+                currentTestIndex++;
+                updateTestProgressBar();
+                if (currentTestIndex < testQuestions.length) {
+                    showTestQuestion(); // Показываем следующий вопрос, если он есть
+                } else {
+                    showTestResults(); // Показываем результаты, если это последний вопрос
+                }
+            }
+        }
+
+        function showTestResults() {
+            const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+            if (percentage >= 80) {
+                testPassScore.textContent = `${percentage.toFixed(2)}%`;
+                testPassMotivation.textContent = "Ты настоящий лесной мастер! Знания расцвели, как весенний лес! 🌳🎉";
+                testPassModal.style.display = 'block';
+                scrollToElement(testPassModal);
+            } else {
+                testFailScore.textContent = `${percentage.toFixed(2)}%`;
+                testFailMotivation.textContent = "Лес знаний оказался слишком густым! Не отчаивайся, попробуй снова! 🍂😓";
+                testFailModal.style.display = 'block';
+                scrollToElement(testFailModal);
+            }
+        }
 
         // Логика для режима "300 Спартанцев"
         document.querySelector('.spartan-mode').addEventListener('click', function() {
@@ -3151,24 +3528,33 @@
             answeredQuestions = 0;
             currentSpartanIndex = 0;
 
-            // Добавляем кнопку "Назад"
-            const backButton = document.createElement('button');
-            backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
-            backButton.classList.add('back-button');
-            backButton.addEventListener('click', resetChapter);
-            spartanChapter.appendChild(backButton);
+            // Добавляем прогресс-бар
+            const progressContainer = document.createElement('div');
+            progressContainer.classList.add('progress-container');
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+            progressBar.id = 'spartan-progress';
+            progressContainer.appendChild(progressBar);
+            spartanChapter.appendChild(progressContainer);
 
             // Показываем первый вопрос
             showSpartanQuestion();
+            updateProgressBar();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('spartan-progress');
+            const percentage = (currentSpartanIndex / totalQuestions) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
 
         function showSpartanQuestion() {
             const spartanChapter = document.getElementById('spartan-chapter');
             const currentQuestion = spartanChapter.querySelector('.question');
 
-            // Удаляем текущий вопрос, если он есть
-            if (currentQuestion) {
+            // Удаляем текущий вопрос, только если есть следующий вопрос
+            if (currentQuestion && currentSpartanIndex < spartanQuestions.length) {
                 currentQuestion.classList.add('slide-out');
                 setTimeout(() => {
                     currentQuestion.remove();
@@ -3194,10 +3580,8 @@
                     });
                     question.classList.add('slide-in');
                     spartanChapter.appendChild(question);
-                } else {
-                    showSpartanResults();
                 }
-            }, currentQuestion ? 500 : 0); // Если есть текущий вопрос, ждем завершения анимации
+            }, currentQuestion && currentSpartanIndex < spartanQuestions.length ? 500 : 0); // Если есть текущий вопрос и следующий, ждем завершения анимации
         }
 
         function handleSpartanOptionClick() {
@@ -3226,7 +3610,19 @@
                 question.classList.add('answered');
                 answeredQuestions++;
                 currentSpartanIndex++;
-                showSpartanQuestion(); // Автоматический переход к следующему вопросу
+                updateProgressBar();
+                // Проверяем, превышает ли количество ошибок 51%
+                const incorrectCount = answeredQuestions - correctAnswers;
+                const incorrectPercentage = (incorrectCount / totalQuestions) * 100;
+                if (incorrectPercentage > 51) {
+                    showSpartanFailResults();
+                    return;
+                }
+                if (currentSpartanIndex < spartanQuestions.length) {
+                    showSpartanQuestion(); // Показываем следующий вопрос, если он есть
+                } else {
+                    showSpartanResults(); // Показываем результаты, если это последний вопрос
+                }
             } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
                 options.forEach(opt => {
                     if (opt.getAttribute('data-correct') === 'true') {
@@ -3241,26 +3637,35 @@
                 answeredQuestions++;
                 correctAnswers++;
                 currentSpartanIndex++;
-                showSpartanQuestion(); // Автоматический переход к следующему вопросу
+                updateProgressBar();
+                if (currentSpartanIndex < spartanQuestions.length) {
+                    showSpartanQuestion(); // Показываем следующий вопрос, если он есть
+                } else {
+                    showSpartanResults(); // Показываем результаты, если это последний вопрос
+                }
             }
         }
 
         function showSpartanResults() {
             const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
-            spartanScore.textContent = `${percentage.toFixed(2)}%`;
-            let motivation;
             if (percentage === 100) {
-                motivation = "Ты настоящий спартанец! Победа за тобой!";
-            } else if (percentage >= 80) {
-                motivation = "Отличный бой! Ты почти достиг вершины!";
-            } else if (percentage >= 60) {
-                motivation = "Хорошая попытка! Продолжай сражаться!";
+                spartanPerfectScore.textContent = `${percentage.toFixed(2)}%`;
+                spartanPerfectMotivation.textContent = "Великолепно, воин! Ты — истинный герой Спарты, чья мудрость и стойкость войдут в легенды! Твоя слава будет вечной! 🏅🔥";
+                spartanPerfectModal.style.display = 'block';
+                scrollToElement(spartanPerfectModal);
             } else {
-                motivation = "Спарта не сдается! Тренируйся и возвращайся!";
+                spartanIntermediateScore.textContent = `${percentage.toFixed(2)}%`;
+                const motivation = "Спарта не сдается! Ты сделал шаг вперед, но дорога к славе еще длинна. Соберись и попробуй снова! ⚔️💥";
+                spartanIntermediateMotivation.textContent = motivation;
+                spartanIntermediateModal.style.display = 'block';
+                scrollToElement(spartanIntermediateModal);
             }
-            spartanMotivation.textContent = motivation;
-            spartanModal.style.display = 'block';
-            scrollToElement(spartanModal);
+        }
+
+        function showSpartanFailResults() {
+            spartanFailMotivation.textContent = "Эта бойня тебе не по зубам! Окстись, посещая это место! ⚰️😵";
+            spartanFailModal.style.display = 'block';
+            scrollToElement(spartanFailModal);
         }
 
         function initializeOptions(chapterId) {
@@ -3440,6 +3845,8 @@
             currentChapterId = null;
             spartanQuestions = [];
             currentSpartanIndex = 0;
+            testQuestions = [];
+            currentTestIndex = 0;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
