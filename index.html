@@ -8,33 +8,34 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            background: #e0f2e9; /* Однотонный цвет, совпадающий с контейнером */
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             color: #333;
             overflow-x: hidden;
+            transition: background 0.5s ease;
         }
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #e0f2e9; /* Мягкий зелёный цвет для контейнера */
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, background 0.5s ease;
             width: 100%;
             box-sizing: border-box;
             overflow: hidden;
             position: relative;
         }
         .container:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
         }
         h1 {
             text-align: center;
             color: #00695c;
-            font-size: 2em;
-            margin-bottom: 25px;
+            font-size: 1.8em;
+            margin-bottom: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             word-wrap: break-word;
         }
@@ -43,8 +44,8 @@
         }
         #toc h2 {
             color: #00796b;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+            font-size: 1.4em;
+            margin-bottom: 10px;
             text-align: center;
         }
         #toc ul {
@@ -52,20 +53,27 @@
             padding: 0;
         }
         #toc li {
-            padding: 12px;
+            width: 100%;
+            height: 50px;
+            padding: 0 10px;
             margin: 8px 0;
             background: #f5fafa;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             font-size: 1em;
             word-wrap: break-word;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
         }
-        #toc li:hover {
+        #toc li:hover:not(.split-active) {
             background: #e0f2f1;
-            transform: translateX(5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
         .chapter {
             display: none;
@@ -79,7 +87,7 @@
             padding: 15px;
             background: #f9fbfc;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
             position: relative;
             width: 100%;
@@ -87,11 +95,12 @@
         }
         .question:hover {
             transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
         .question p {
-            margin: 0 0 12px 0;
-            font-weight: 600;
-            font-size: 1.1em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            font-size: 1.2em;
             color: #004d40;
             word-wrap: break-word;
         }
@@ -106,25 +115,32 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             font-size: 1em;
             word-wrap: break-word;
         }
         .options li:hover {
             background: #e8f5e9;
             transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
         }
         .correct {
             background: #4caf50 !important;
             color: white;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.5);
+            /* Убрано transform: scale(1.03) */
         }
         .incorrect {
             background: #f44336 !important;
             color: white;
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
-            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(244, 67, 54, 0.5);
+            /* Убрано transform: scale(1.03) */
+        }
+        .correct-hint {
+            background: #a5d6a7 !important;
+            color: white;
+            box-shadow: 0 6px 15px rgba(165, 214, 167, 0.5);
+            /* Убрано transform: scale(1.03) */
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -133,108 +149,341 @@
         .hidden {
             display: none;
         }
-        .back-button, .generate-test, .spartan-mode {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 25px;
-            background: #00796b;
-            color: white;
-            border: none;
-            border-radius: 25px;
+        .custom-button {
+            width: 100%;
+            padding: 0 10px;
+            margin: 8px 0;
+            background: #f5fafa;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1em;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
-            width: fit-content;
-        }
-        .spartan-mode {
-            background: #b71c1c;
-        }
-        .back-button:hover, .generate-test:hover, .spartan-mode:hover {
-            background: #009688;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 150, 136, 0.4);
-        }
-        .spartan-mode:hover {
-            background: #d32f2f;
-        }
-        .selected {
-            background: #ffca28 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 1em;
+            word-wrap: break-word;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            border: none;
             color: #333;
-            box-shadow: 0 5px 15px rgba(255, 202, 40, 0.4);
+        }
+        .custom-button:hover {
+            background: #e0f2f1;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .back-button {
+            height: 50px;
+            background: #f5fafa; /* Цвет как у кнопок выбора глав */
+        }
+        .back-button:hover {
+            background: #e0f2f1; /* Цвет при наведении как у кнопок выбора глав */
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
         .modal {
-            display: none;
+            display: none; /* Скрываем модальные окна по умолчанию */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.6);
             z-index: 1000;
             animation: fadeInBackdrop 0.3s ease;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex; /* Показываем модальное окно с центрированием */
         }
         .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #ffffff;
+            position: relative;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
-            max-width: 450px;
+            max-width: 400px;
             width: 90%;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
             animation: slideIn 0.4s ease;
             box-sizing: border-box;
+            overflow: hidden;
         }
         .modal-content h2 {
-            color: #00695c;
-            font-size: 1.8em;
-            margin-bottom: 15px;
+            font-size: 1.6em;
+            margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
         }
         .modal-content p {
-            margin: 10px 0;
-            font-size: 1.1em;
+            margin: 8px 0;
+            font-size: 1em;
         }
         .modal-content .score {
-            color: #0288d1;
             font-weight: bold;
-            font-size: 2em;
-            margin: 10px 0;
+            font-size: 1.8em;
+            margin: 8px 0;
         }
-        .modal-content .motivation {
+        #result-modal .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            color: #333;
+            border: 4px solid #e0e0e0;
+        }
+        #result-modal h2 {
             color: #555;
-            font-style: italic;
-            font-size: 1em;
         }
-        .modal-content button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 25px;
-            background: #00796b;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+        #result-modal .score {
+            color: #d4a373; /* Бежевый цвет для процента правильных ответов */
+        }
+        #result-modal .modal-content::before {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        #result-modal .modal-content::after {
+            content: '🌕';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        #blacklist-modal .modal-content {
+            background: linear-gradient(135deg, #424242 0%, #212121 100%);
+            color: #fff;
+            border: 4px solid #616161;
+        }
+        #blacklist-modal h2 {
+            color: #fff;
+        }
+        #blacklist-modal p {
+            color: #bdbdbd;
+        }
+        #blacklist-modal .modal-content::before {
+            content: '🌑';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        #blacklist-modal .modal-content::after {
+            content: '🌠';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        #blacklist-success-modal .modal-content {
+            background: linear-gradient(135deg, #424242 0%, #212121 100%);
+            color: #fff;
+            border: 4px solid #616161;
+        }
+        #blacklist-success-modal h2 {
+            color: #fff;
+        }
+        #blacklist-success-modal .modal-content::before {
+            content: '✅';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        #blacklist-success-modal .modal-content::after {
+            content: '🌠';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .spartan-modal-style .modal-content {
+            background: linear-gradient(135deg, #8b0000 0%, #ff4500 100%);
+            color: #fff;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.5);
+        }
+        .spartan-modal-style h2 {
+            color: #eceff1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .spartan-modal-style .score {
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .spartan-modal-style .motivation {
+            color: #cfd8dc;
+            font-style: normal;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .spartan-modal-style .modal-content::before {
+            content: '🛡️⚔️';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        .spartan-modal-style .modal-content::after {
+            content: '⚔️⛑️';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .test-fail-modal-style .modal-content {
+            background: linear-gradient(135deg, #ef5350 0%, #b71c1c 100%);
+            color: #fff;
+            border: 4px solid #d32f2f;
+            box-shadow: 0 0 20px rgba(211, 47, 47, 0.5), 0 0 40px rgba(239, 83, 80, 0.3);
+        }
+        .test-fail-modal-style h2 {
+            color: #eceff1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .test-fail-modal-style .score {
+            color: #fff;
+        }
+        .test-fail-modal-style .motivation {
+            color: #cfd8dc;
+            font-style: normal;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .test-fail-modal-style .modal-content::before {
+            content: '🌧️🍂';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        .test-fail-modal-style .modal-content::after {
+            content: '🍂😓';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .test-pass-modal-style .modal-content {
+            background: linear-gradient(135deg, #81c784 0%, #388e3c 100%);
+            color: #fff;
+            border: 4px solid #4caf50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.7), 0 0 40px rgba(129, 199, 132, 0.4);
+        }
+        .test-pass-modal-style h2 {
+            color: #eceff1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .test-pass-modal-style .score {
+            color: #fff;
+        }
+        .test-pass-modal-style .motivation {
+            color: #cfd8dc;
+            font-style: normal;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .test-pass-modal-style .modal-content::before {
+            content: '🌞🌟';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(-30deg);
+        }
+        .test-pass-modal-style .modal-content::after {
+            content: '🌟🌳';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 80px;
+            opacity: 0.2;
+            transform: rotate(30deg);
+        }
+        .modal-content .custom-button {
+            height: 35px;
             width: 80%;
-            max-width: 300px;
-            position: relative;
-            z-index: 1;
+            max-width: 250px;
+            margin: 8px auto;
+            z-index: 10;
         }
-        .modal-content button:hover {
-            background: #009688;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 150, 136, 0.4);
+        #result-modal .custom-button {
+            background: #f0e8d9;
+            color: #333;
+        }
+        #result-modal .custom-button:hover {
+            background: #e0d8c9;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        #blacklist-modal .custom-button,
+        #blacklist-success-modal .custom-button {
+            background: #ffffff;
+            color: #333;
+        }
+        #blacklist-modal .custom-button:hover,
+        #blacklist-success-modal .custom-button:hover {
+            background: #e0f2f1;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .spartan-modal-style .custom-button {
+            background: #b0bec5;
+            color: #333;
+        }
+        .spartan-modal-style .custom-button:hover {
+            background: #90a4ae;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .test-fail-modal-style .custom-button {
+            background: #b0bec5;
+            color: #333;
+        }
+        .test-fail-modal-style .custom-button:hover {
+            background: #90a4ae;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .test-pass-modal-style .custom-button {
+            background: #b0bec5;
+            color: #333;
+        }
+        .test-pass-modal-style .custom-button:hover {
+            background: #90a4ae;
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .selected {
+            background: #ffca28 !important;
+            color: #333;
+            box-shadow: 0 6px 15px rgba(255, 202, 40, 0.5);
         }
         @keyframes slideIn {
-            from { opacity: 0; transform: translate(-50%, -60%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeInBackdrop {
             from { opacity: 0; }
@@ -254,260 +503,132 @@
         .question.slide-in {
             animation: slideInRight 0.5s ease forwards;
         }
-        /* Стиль для модальных окон в режиме "300 Спартанцев" */
-        .spartan-modal-style .modal-content {
-            background: linear-gradient(135deg, #8b0000 0%, #ff4500 100%);
-            color: #fff;
-            border: 3px solid #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 69, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        .spartan-modal-style .modal-content::before {
-            content: '🛡️⚔️';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(-30deg);
-        }
-        .spartan-modal-style .modal-content::after {
-            content: '⚔️⛑️';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(30deg);
-        }
-        @keyframes glow {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.2); opacity: 0.6; }
-        }
-        .spartan-modal-style h2 {
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        .spartan-modal-style .score {
-            color: #ffd700;
-            font-size: 2.5em;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-        .spartan-modal-style .motivation {
-            color: #fff;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        .spartan-modal-style button {
-            background: #ffd700;
-            color: #8b0000;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        .spartan-modal-style button:hover {
-            background: #ffec80;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        /* Стиль для модальных окон в режиме "Составить список вопросов для аттестации" (не пройдено) */
-        .test-fail-modal-style .modal-content {
-            background: linear-gradient(135deg, #ef5350 0%, #b71c1c 100%);
-            color: #fff;
-            border: 4px solid #d32f2f;
-            box-shadow: 0 0 25px rgba(211, 47, 47, 0.5), 0 0 50px rgba(239, 83, 80, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        .test-fail-modal-style .modal-content::before {
-            content: '🌧️🍂';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(-30deg);
-        }
-        .test-fail-modal-style .modal-content::after {
-            content: '🍂😓';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(30deg);
-        }
-        .test-fail-modal-style h2 {
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        .test-fail-modal-style .score {
-            color: #fff;
-            font-size: 2.5em;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-        }
-        .test-fail-modal-style .motivation {
-            color: #fff;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .test-fail-modal-style button {
-            background: #d32f2f;
-            color: #ffffff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        .test-fail-modal-style button:hover {
-            background: #ef5350;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        /* Стиль для модальных окон в режиме "Составить список вопросов для аттестации" (пройдено) */
-        .test-pass-modal-style .modal-content {
-            background: linear-gradient(135deg, #81c784 0%, #388e3c 100%);
-            color: #fff;
-            border: 4px solid #4caf50;
-            box-shadow: 0 0 25px rgba(76, 175, 80, 0.7), 0 0 50px rgba(129, 199, 132, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        .test-pass-modal-style .modal-content::before {
-            content: '🌞🌟';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(-30deg);
-        }
-        .test-pass-modal-style .modal-content::after {
-            content: '🌟🌳';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            font-size: 100px;
-            opacity: 0.2;
-            transform: rotate(30deg);
-        }
-        .test-pass-modal-style h2 {
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        .test-pass-modal-style .score {
-            color: #fff;
-            font-size: 2.5em;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-        }
-        .test-pass-modal-style .motivation {
-            color: #fff;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .test-pass-modal-style button {
-            background: #4caf50;
-            color: #ffffff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        .test-pass-modal-style button:hover {
-            background: #66bb6a;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        /* Прогресс-бар */
         .progress-container {
             width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 25px;
+            height: 50px;
             margin: 20px 0;
+            background: #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
             overflow: hidden;
+            position: relative;
         }
         .progress-bar {
-            height: 30px;
-            background-color: #00796b;
+            height: 100%;
+            background: linear-gradient(to right, #a5d6a7, #388e3c); /* Зелёный градиент */
             width: 0%;
             transition: width 0.5s ease;
-            border-radius: 25px;
+            border-radius: 10px;
+        }
+        .split-button-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to right, #f5f5dc, #d3d3d3); /* Бежевый -> Лунный */
+            border-radius: 10px;
+        }
+        .mode-buttons-container .split-button-container {
+            background: linear-gradient(to right, #ffdab9, #ff9999); /* Светло-оранжевый -> Светло-красный */
+        }
+        .mode-buttons-container {
+            width: 100%;
+            height: 50px;
+            padding: 0;
+            margin: 8px 0;
+            background: #f5fafa;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+        .split-button {
+            flex: 1;
+            padding: 0 10px;
+            color: #333;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            margin: 0;
+            border-radius: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            background: none;
+        }
+        .split-button.intuition {
+            border-radius: 10px 0 0 10px;
+        }
+        .split-button.intuition:hover {
+            background: rgba(245, 245, 220, 0.8); /* Более насыщенный цвет при наведении */
+            transform: scale(1.05); /* Увеличение */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+        }
+        .split-button.spartan {
+            border-radius: 0 10px 10px 0;
+        }
+        .split-button.blacklist {
+            border-radius: 0 10px 10px 0;
+            color: #333;
+        }
+        .split-button.blacklist:hover {
+            background: rgba(211, 211, 211, 0.8); /* Более насыщенный цвет при наведении */
+            transform: scale(1.05); /* Увеличение */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+        }
+        .split-button.spartan:hover {
+            background: rgba(255, 153, 153, 0.8); /* Более насыщенный светло-красный */
+            transform: scale(1.05); /* Увеличение */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+        }
+        .split-button#test-mode:hover {
+            background: rgba(255, 218, 185, 0.8); /* Более насыщенный светло-оранжевый */
+            transform: scale(1.05); /* Увеличение */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для выделения */
         }
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .container { padding: 15px; margin: 0; max-width: 100%; }
-            h1 { font-size: 1.5em; margin-bottom: 20px; }
-            #toc h2 { font-size: 1.3em; margin-bottom: 10px; }
-            #toc li { padding: 10px; margin: 5px 0; font-size: 0.9em; }
+            body { padding: 10px; }
+            .container { padding: 12px; margin: 0; max-width: 100%; }
+            h1 { font-size: 1.6em; margin-bottom: 15px; }
+            #toc h2 { font-size: 1.2em; margin-bottom: 8px; }
+            #toc li, .mode-buttons-container { padding: 0; margin: 6px 0; font-size: 0.9em; height: 45px; }
             .question { margin: 15px 0; padding: 12px; }
-            .question p { font-size: 1em; margin-bottom: 10px; }
+            .question p { font-size: 1.1em; margin-bottom: 10px; }
             .options li { padding: 10px; margin: 5px 0; font-size: 0.9em; }
-            .back-button, .generate-test, .spartan-mode { padding: 8px 20px; font-size: 0.9em; margin: 15px auto; }
-            .modal-content { padding: 15px; max-width: 90%; }
-            .modal-content h2 { font-size: 1.5em; margin-bottom: 10px; }
-            .modal-content p { font-size: 1em; }
-            .modal-content .score { font-size: 1.8em; }
-            .modal-content .motivation { font-size: 0.9em; }
-            .modal-content button { padding: 8px 20px; font-size: 0.9em; margin: 5px auto; width: 90%; }
-            .progress-container { margin: 15px 0; }
-            .progress-bar { height: 25px; }
-            .spartan-modal-style h2 { font-size: 1.6em; }
-            .spartan-modal-style .score { font-size: 2em; }
-            .spartan-modal-style .motivation { font-size: 1em; }
-            .spartan-modal-style button { padding: 10px 25px; font-size: 1em; }
-            .test-fail-modal-style h2, .test-pass-modal-style h2 { font-size: 1.6em; }
-            .test-fail-modal-style .score, .test-pass-modal-style .score { font-size: 2em; }
-            .test-fail-modal-style .motivation, .test-pass-modal-style .motivation { font-size: 1em; }
-            .test-fail-modal-style button, .test-pass-modal-style button { padding: 10px 25px; font-size: 1em; }
+            .back-button { padding: 0 10px; font-size: 0.9em; height: 45px; margin: 15px auto; }
+            .modal-content { padding: 12px; max-width: 90%; }
+            .modal-content h2 { font-size: 1.4em; margin-bottom: 8px; }
+            .modal-content p { font-size: 0.9em; }
+            .modal-content .score { font-size: 1.6em; }
+            .modal-content .custom-button { padding: 0 10px; font-size: 0.85em; height: 30px; margin: 5px auto; width: 90%; }
+            .progress-container { margin: 12px 0; height: 45px; }
+            .split-button { padding: 0 10px; font-size: 0.9em; }
         }
         @media (max-width: 480px) {
-            body { padding: 10px; }
-            .container { padding: 10px; }
-            h1 { font-size: 1.2em; margin-bottom: 15px; }
+            body { padding: 8px; }
+            .container { padding: 8px; }
+            h1 { font-size: 1.4em; margin-bottom: 12px; }
             #toc h2 { font-size: 1.1em; }
-            #toc li { padding: 8px; font-size: 0.85em; }
-            .question { margin: 10px 0; padding: 10px; }
-            .question p { font-size: 0.9em; margin-bottom: 8px; }
+            #toc li, .mode-buttons-container { padding: 0; font-size: 0.85em; height: 40px; }
+            .question { margin: 12px 0; padding: 10px; }
+            .question p { font-size: 1em; margin-bottom: 8px; }
             .options li { padding: 8px; font-size: 0.85em; }
-            .back-button, .generate-test, .spartan-mode { padding: 6px 15px; font-size: 0.85em; margin: 10px auto; }
-            .modal-content { padding: 10px; }
-            .modal-content h2 { font-size: 1.3em; }
-            .modal-content .score { font-size: 1.5em; }
-            .modal-content .motivation { font-size: 0.85em; }
-            .modal-content button { padding: 6px 15px; font-size: 0.85em; margin: 5px auto; width: 90%; }
-            .progress-container { margin: 10px 0; }
-            .progress-bar { height: 20px; }
-            .spartan-modal-style h2 { font-size: 1.4em; }
-            .spartan-modal-style .score { font-size: 1.8em; }
-            .spartan-modal-style .motivation { font-size: 0.9em; }
-            .spartan-modal-style button { padding: 8px 20px; font-size: 0.9em; }
-            .test-fail-modal-style h2, .test-pass-modal-style h2 { font-size: 1.4em; }
-            .test-fail-modal-style .score, .test-pass-modal-style .score { font-size: 1.8em; }
-            .test-fail-modal-style .motivation, .test-pass-modal-style .motivation { font-size: 0.9em; }
-            .test-fail-modal-style button, .test-pass-modal-style button { padding: 8px 20px; font-size: 0.9em; }
+            .back-button { padding: 0 8px; font-size: 0.85em; height: 40px; margin: 12px auto; }
+            .modal-content { padding: 8px; }
+            .modal-content h2 { font-size: 1.2em; }
+            .modal-content .score { font-size: 1.4em; }
+            .modal-content .custom-button { padding: 0 8px; font-size: 0.8em; height: 28px; margin: 5px auto; width: 90%; }
+            .progress-container { margin: 8px 0; height: 40px; }
+            .split-button { padding: 0 8px; font-size: 0.85em; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
@@ -533,8 +654,12 @@
                 <li data-chapter="chapter-1-13">1.13 Правила лесовосстановления</li>
                 <li data-chapter="chapter-1-14">1.14 Правила пожарной безопасности в лесах</li>
             </ul>
-            <button class="generate-test">СОСТАВИТЬ СПИСОК ВОПРОСОВ ДЛЯ АТТЕСТАЦИИ</button>
-            <button class="spartan-mode">300 СПАРТАНЦЕВ</button>
+            <div class="mode-buttons-container">
+                <div class="split-button-container">
+                    <button class="split-button intuition" id="test-mode">Аттестация</button>
+                    <button class="split-button spartan" id="spartan-mode">300 Спартанцев</button>
+                </div>
+            </div>
         </div>
 
         <!-- Глава 1.1 -->
@@ -3115,32 +3240,18 @@
         </div>
 
         <!-- Контейнер для теста аттестации -->
-        <div class="chapter" id="test-chapter"></div>
 
-        <!-- Контейнер для режима "300 Спартанцев" -->
+        <div class="chapter" id="test-chapter"></div>
         <div class="chapter" id="spartan-chapter"></div>
 
-        <!-- Модальное окно результатов (для других режимов) -->
         <div class="modal" id="result-modal">
             <div class="modal-content">
-                <h2>Результаты</h2>
+                <h2>Белый список изучен</h2>
                 <p><span class="score" id="modal-score">0%</span></p>
-                <p class="motivation" id="modal-motivation"></p>
-                <button id="close-modal">Закрыть</button>
+                <button class="custom-button" id="close-modal">Закрыть</button>
             </div>
         </div>
 
-        <!-- Модальное окно выбора режима -->
-        <div class="modal" id="mode-modal">
-            <div class="modal-content">
-                <h2>Режимы прохождения</h2>
-                <button id="mode-intuition">Обычный</button>
-                <button id="mode-blacklist">Чёрный список</button>
-                <button id="close-mode-modal">Закрыть</button>
-            </div>
-        </div>
-
-        <!-- Модальное окно чёрного списка -->
         <div class="modal" id="blacklist-modal">
             <div class="modal-content">
                 <h2>Составлен чёрный список</h2>
@@ -3148,62 +3259,55 @@
             </div>
         </div>
 
-        <!-- Модальное окно успешного прохождения чёрного списка -->
         <div class="modal" id="blacklist-success-modal">
             <div class="modal-content">
-                <h2>Чёрный список пуст!</h2>
-                <button id="close-blacklist-success">Закрыть</button>
+                <h2>Чёрный список пуст</h2>
+                <button class="custom-button" id="close-blacklist-success">Закрыть</button>
             </div>
         </div>
 
-        <!-- Модальное окно для режима "300 Спартанцев" (промежуточный результат) -->
         <div class="modal spartan-modal-style" id="spartan-intermediate-modal">
             <div class="modal-content">
-                <h2>Слава Спарте! ⚔️</h2>
+                <h2>Слава Спарте</h2>
                 <p><span class="score" id="spartan-intermediate-score">0%</span></p>
                 <p class="motivation" id="spartan-intermediate-motivation"></p>
-                <button id="close-spartan-intermediate-modal">Завершить сражение</button>
+                <button class="custom-button" id="close-spartan-intermediate-modal">Завершить сражение</button>
             </div>
         </div>
-
-        <!-- Модальное окно для режима "300 Спартанцев" (100% результат) -->
         <div class="modal spartan-modal-style" id="spartan-perfect-modal">
             <div class="modal-content">
-                <h2>Легенда Спарты! 🏆</h2>
+                <h2>Легенда Спарты</h2>
                 <p><span class="score" id="spartan-perfect-score">100%</span></p>
                 <p class="motivation" id="spartan-perfect-motivation"></p>
-                <button id="close-spartan-perfect-modal">Завершить сражение</button>
+                <button class="custom-button" id="close-spartan-perfect-modal">Завершить сражение</button>
             </div>
         </div>
-
-        <!-- Модальное окно для режима "300 Спартанцев" (провал >51% ошибок) -->
         <div class="modal spartan-modal-style" id="spartan-fail-modal">
             <div class="modal-content">
-                <h2>Поражение! 💀</h2>
+                <h2>Поражение</h2>
+                <p><span class="score" id="spartan-fail-score">0%</span></p>
                 <p class="motivation" id="spartan-fail-motivation"></p>
-                <button id="close-spartan-fail-modal">Завершить сражение</button>
+                <button class="custom-button" id="close-spartan-fail-modal">Завершить сражение</button>
             </div>
         </div>
 
-        <!-- Модальное окно для режима "Составить список вопросов для аттестации" (не пройдено) -->
         <div class="modal test-fail-modal-style" id="test-fail-modal">
             <div class="modal-content">
-                <h2>Аттестация не пройдена! 🌧️</h2>
+                <h2>Аттестация не пройдена</h2>
                 <p><span class="score" id="test-fail-score">0%</span></p>
                 <p class="motivation" id="test-fail-motivation">Лес знаний оказался слишком густым! Не отчаивайся, попробуй снова! 🍂😓</p>
-                <button id="close-test-fail-modal">К оглавлению</button>
+                <button class="custom-button" id="close-test-fail-modal">К оглавлению</button>
             </div>
         </div>
-
-        <!-- Модальное окно для режима "Составить список вопросов для аттестации" (пройдено) -->
         <div class="modal test-pass-modal-style" id="test-pass-modal">
             <div class="modal-content">
-                <h2>Аттестация пройдена! 🌟</h2>
+                <h2>Аттестация пройдена</h2>
                 <p><span class="score" id="test-pass-score">0%</span></p>
                 <p class="motivation" id="test-pass-motivation">Ты настоящий лесной мастер! Знания расцвели, как весенний лес! 🌳🎉</p>
-                <button id="close-test-pass-modal">К оглавлению</button>
+                <button class="custom-button" id="close-test-pass-modal">К оглавлению</button>
             </div>
         </div>
+    </div>
 
     <script>
         let totalQuestions = 0;
@@ -3217,17 +3321,14 @@
         let currentSpartanIndex = 0;
         let testQuestions = [];
         let currentTestIndex = 0;
+        let activeTocItem = null;
+
         const toc = document.getElementById('toc');
         const chapters = document.querySelectorAll('.chapter');
         const container = document.querySelector('.container');
         const resultModal = document.getElementById('result-modal');
         const modalScore = document.getElementById('modal-score');
-        const modalMotivation = document.getElementById('modal-motivation');
         const closeModalBtn = document.getElementById('close-modal');
-        const modeModal = document.getElementById('mode-modal');
-        const modeIntuitionBtn = document.getElementById('mode-intuition');
-        const modeBlacklistBtn = document.getElementById('mode-blacklist');
-        const closeModeModalBtn = document.getElementById('close-mode-modal');
         const blacklistModal = document.getElementById('blacklist-modal');
         const countdownElement = document.getElementById('countdown');
         const blacklistSuccessModal = document.getElementById('blacklist-success-modal');
@@ -3241,6 +3342,7 @@
         const spartanPerfectMotivation = document.getElementById('spartan-perfect-motivation');
         const closeSpartanPerfectModalBtn = document.getElementById('close-spartan-perfect-modal');
         const spartanFailModal = document.getElementById('spartan-fail-modal');
+        const spartanFailScore = document.getElementById('spartan-fail-score');
         const spartanFailMotivation = document.getElementById('spartan-fail-motivation');
         const closeSpartanFailModalBtn = document.getElementById('close-spartan-fail-modal');
         const testFailModal = document.getElementById('test-fail-modal');
@@ -3252,7 +3354,6 @@
         const testPassMotivation = document.getElementById('test-pass-motivation');
         const closeTestPassModalBtn = document.getElementById('close-test-pass-modal');
 
-        // Хранилище исходных вопросов для каждой главы
         const originalChaptersContent = {};
         chapters.forEach(chapter => {
             if (chapter.id !== 'test-chapter' && chapter.id !== 'spartan-chapter') {
@@ -3260,100 +3361,131 @@
             }
         });
 
+        const originalTocItems = {};
+        document.querySelectorAll('#toc li').forEach(item => {
+            originalTocItems[item.getAttribute('data-chapter')] = item.cloneNode(true);
+        });
+
         function scrollToElement(element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         closeModalBtn.addEventListener('click', () => {
-            resultModal.style.display = 'none';
+            resultModal.classList.remove('active');
             resetChapter();
         });
 
-        closeModeModalBtn.addEventListener('click', () => {
-            modeModal.style.display = 'none';
-        });
-
         closeBlacklistSuccessBtn.addEventListener('click', () => {
-            blacklistSuccessModal.style.display = 'none';
+            blacklistSuccessModal.classList.remove('active');
             resetChapter();
         });
 
         closeSpartanIntermediateModalBtn.addEventListener('click', () => {
-            spartanIntermediateModal.style.display = 'none';
+            spartanIntermediateModal.classList.remove('active');
             resetChapter();
         });
 
         closeSpartanPerfectModalBtn.addEventListener('click', () => {
-            spartanPerfectModal.style.display = 'none';
+            spartanPerfectModal.classList.remove('active');
             resetChapter();
         });
 
         closeSpartanFailModalBtn.addEventListener('click', () => {
-            spartanFailModal.style.display = 'none';
+            spartanFailModal.classList.remove('active');
             resetChapter();
         });
 
         closeTestFailModalBtn.addEventListener('click', () => {
-            testFailModal.style.display = 'none';
+            testFailModal.classList.remove('active');
             resetChapter();
         });
 
         closeTestPassModalBtn.addEventListener('click', () => {
-            testPassModal.style.display = 'none';
+            testPassModal.classList.remove('active');
             resetChapter();
         });
 
-        function showModeModal(callback) {
-            modeModal.style.display = 'block';
-            scrollToElement(modeModal);
-            modeIntuitionBtn.onclick = () => {
-                currentMode = 'intuition';
-                modeModal.style.display = 'none';
-                callback();
-            };
-            modeBlacklistBtn.onclick = () => {
-                currentMode = 'blacklist';
-                modeModal.style.display = 'none';
-                callback();
-            };
+        function resetTocItem(item) {
+            const splitContainer = item.querySelector('.split-button-container');
+            if (splitContainer) {
+                const chapterId = item.getAttribute('data-chapter');
+                const originalItem = originalTocItems[chapterId];
+                item.innerHTML = originalItem.innerHTML;
+                item.classList.remove('split-active');
+                item.addEventListener('click', handleTocItemClick);
+            }
+        }
+
+        function handleTocItemClick() {
+            if (activeTocItem && activeTocItem !== this) {
+                resetTocItem(activeTocItem);
+            }
+            activeTocItem = this;
+
+            if (!this.classList.contains('split-active')) {
+                this.classList.add('split-active');
+                const chapterId = this.getAttribute('data-chapter');
+                const splitContainer = document.createElement('div');
+                splitContainer.classList.add('split-button-container');
+
+                const intuitionBtn = document.createElement('button');
+                intuitionBtn.textContent = 'Белый список';
+                intuitionBtn.classList.add('split-button', 'intuition');
+                intuitionBtn.addEventListener('click', () => startChapter(chapterId, 'intuition'));
+
+                const blacklistBtn = document.createElement('button');
+                blacklistBtn.textContent = 'Чёрный список';
+                blacklistBtn.classList.add('split-button', 'blacklist');
+                blacklistBtn.addEventListener('click', () => startChapter(chapterId, 'blacklist'));
+
+                splitContainer.appendChild(intuitionBtn);
+                splitContainer.appendChild(blacklistBtn);
+                this.innerHTML = '';
+                this.appendChild(splitContainer);
+            }
         }
 
         document.querySelectorAll('#toc li').forEach(item => {
-            item.addEventListener('click', function() {
-                showModeModal(() => {
-                    toc.classList.add('hidden');
-                    const chapterId = this.getAttribute('data-chapter');
-                    currentChapterId = chapterId;
-                    const chapter = document.getElementById(chapterId);
-                    chapter.classList.add('active');
-
-                    if (!chapter.querySelector('.back-button')) {
-                        const backButton = document.createElement('button');
-                        backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
-                        backButton.classList.add('back-button');
-                        backButton.addEventListener('click', resetChapter);
-                        chapter.insertBefore(backButton, chapter.firstChild);
-                    }
-
-                    totalQuestions = chapter.querySelectorAll('.question').length;
-                    correctAnswers = 0;
-                    answeredQuestions = 0;
-                    incorrectQuestions = [];
-                    hasEnteredBlacklist = false;
-                    initializeOptions(chapterId);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            });
+            item.addEventListener('click', handleTocItemClick);
         });
 
-        document.querySelector('.generate-test').addEventListener('click', function() {
-            // Устанавливаем режим "intuition" по умолчанию, без показа модального окна
+        document.getElementById('test-mode').addEventListener('click', startTestMode);
+        document.getElementById('spartan-mode').addEventListener('click', startSpartanMode);
+
+        function startChapter(chapterId, mode) {
+            currentMode = mode;
+            toc.classList.add('hidden');
+            currentChapterId = chapterId;
+            const chapter = document.getElementById(chapterId);
+            chapter.classList.add('active');
+
+            if (!chapter.querySelector('.back-button')) {
+                const backButton = document.createElement('button');
+                backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
+                backButton.classList.add('custom-button', 'back-button');
+                backButton.addEventListener('click', resetChapter);
+                chapter.insertBefore(backButton, chapter.firstChild);
+            }
+
+            totalQuestions = chapter.querySelectorAll('.question').length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            incorrectQuestions = [];
+            hasEnteredBlacklist = false;
+            initializeOptions(chapterId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startTestMode() {
             currentMode = 'intuition';
             toc.classList.add('hidden');
             const testChapter = document.getElementById('test-chapter');
             currentChapterId = 'test-chapter';
             testChapter.innerHTML = '';
             testChapter.classList.add('active');
+
+            // Сбрасываем оригинальные главы перед началом теста
+            resetOriginalChapters();
 
             const questionCounts = {
                 'chapter-1-1': 3, 'chapter-1-2': 4, 'chapter-1-3': 2, 'chapter-1-4': 5,
@@ -3377,7 +3509,12 @@
             answeredQuestions = 0;
             currentTestIndex = 0;
 
-            // Добавляем прогресс-бар вместо кнопки "Вернуться к оглавлению"
+            const backButton = document.createElement('button');
+            backButton.textContent = 'ПОКИНУТЬ ЭКЗАМЕН';
+            backButton.classList.add('custom-button', 'back-button');
+            backButton.addEventListener('click', resetChapter);
+            testChapter.appendChild(backButton);
+
             const progressContainer = document.createElement('div');
             progressContainer.classList.add('progress-container');
             const progressBar = document.createElement('div');
@@ -3386,11 +3523,51 @@
             progressContainer.appendChild(progressBar);
             testChapter.appendChild(progressContainer);
 
-            // Показываем первый вопрос
             showTestQuestion();
             updateTestProgressBar();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        }
+
+        function startSpartanMode() {
+            toc.classList.add('hidden');
+            const spartanChapter = document.getElementById('spartan-chapter');
+            currentChapterId = 'spartan-chapter';
+            spartanChapter.innerHTML = '';
+            spartanChapter.classList.add('active');
+
+            // Сбрасываем оригинальные главы перед началом режима
+            resetOriginalChapters();
+
+            spartanQuestions = [];
+            for (const chapterId in originalChaptersContent) {
+                const questions = Array.from(originalChaptersContent[chapterId].querySelectorAll('.question'));
+                spartanQuestions = spartanQuestions.concat(questions.map(q => q.cloneNode(true)));
+            }
+
+            spartanQuestions.sort(() => 0.5 - Math.random());
+            totalQuestions = spartanQuestions.length;
+            correctAnswers = 0;
+            answeredQuestions = 0;
+            currentSpartanIndex = 0;
+
+            const backButton = document.createElement('button');
+            backButton.textContent = 'РЕТИРОВАТЬСЯ С ПОЛЯ БОЯ';
+            backButton.classList.add('custom-button', 'back-button');
+            backButton.addEventListener('click', resetChapter);
+            spartanChapter.appendChild(backButton);
+
+            const progressContainer = document.createElement('div');
+            progressContainer.classList.add('progress-container');
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+            progressBar.id = 'spartan-progress';
+            progressContainer.appendChild(progressBar);
+            spartanChapter.appendChild(progressContainer);
+
+            showSpartanQuestion();
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         function updateTestProgressBar() {
             const progressBar = document.getElementById('test-progress');
@@ -3402,15 +3579,13 @@
             const testChapter = document.getElementById('test-chapter');
             const currentQuestion = testChapter.querySelector('.question');
 
-            // Удаляем текущий вопрос, только если есть следующий вопрос
             if (currentQuestion && currentTestIndex < testQuestions.length) {
                 currentQuestion.classList.add('slide-out');
                 setTimeout(() => {
                     currentQuestion.remove();
-                }, 500); // Даем анимации завершиться
+                }, 500);
             }
 
-            // Показываем следующий вопрос
             setTimeout(() => {
                 if (currentTestIndex < testQuestions.length) {
                     const question = testQuestions[currentTestIndex].cloneNode(true);
@@ -3422,15 +3597,16 @@
                         optionsList.appendChild(optionsList.removeChild(options[j]));
                     }
                     options.forEach(opt => {
-                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected', 'correct-hint');
                         opt.style.pointerEvents = 'auto';
                         opt.removeEventListener('click', handleTestOptionClick);
                         opt.addEventListener('click', handleTestOptionClick);
                     });
+                    question.classList.remove('answered');
                     question.classList.add('slide-in');
                     testChapter.appendChild(question);
                 }
-            }, currentQuestion && currentTestIndex < testQuestions.length ? 500 : 0); // Если есть текущий вопрос и следующий, ждем завершения анимации
+            }, currentQuestion && currentTestIndex < testQuestions.length ? 500 : 0);
         }
 
         function handleTestOptionClick() {
@@ -3451,22 +3627,21 @@
 
             if (!isCorrect) {
                 options.forEach(opt => {
-                    if (opt !== this) opt.classList.add('hidden');
+                    if (opt !== this) {
+                        opt.classList.add('hidden');
+                    }
                     opt.style.pointerEvents = 'none';
                 });
                 this.classList.remove('selected');
                 this.classList.add('incorrect');
                 question.classList.add('answered');
                 answeredQuestions++;
-                if (currentMode === 'blacklist') {
-                    incorrectQuestions.push(question.cloneNode(true));
-                }
                 currentTestIndex++;
                 updateTestProgressBar();
                 if (currentTestIndex < testQuestions.length) {
-                    showTestQuestion(); // Показываем следующий вопрос, если он есть
+                    showTestQuestion();
                 } else {
-                    showTestResults(); // Показываем результаты, если это последний вопрос
+                    showTestResults();
                 }
             } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
                 options.forEach(opt => {
@@ -3484,9 +3659,9 @@
                 currentTestIndex++;
                 updateTestProgressBar();
                 if (currentTestIndex < testQuestions.length) {
-                    showTestQuestion(); // Показываем следующий вопрос, если он есть
+                    showTestQuestion();
                 } else {
-                    showTestResults(); // Показываем результаты, если это последний вопрос
+                    showTestResults();
                 }
             }
         }
@@ -3496,52 +3671,15 @@
             if (percentage >= 80) {
                 testPassScore.textContent = `${percentage.toFixed(2)}%`;
                 testPassMotivation.textContent = "Ты настоящий лесной мастер! Знания расцвели, как весенний лес! 🌳🎉";
-                testPassModal.style.display = 'block';
+                testPassModal.classList.add('active');
                 scrollToElement(testPassModal);
             } else {
                 testFailScore.textContent = `${percentage.toFixed(2)}%`;
                 testFailMotivation.textContent = "Лес знаний оказался слишком густым! Не отчаивайся, попробуй снова! 🍂😓";
-                testFailModal.style.display = 'block';
+                testFailModal.classList.add('active');
                 scrollToElement(testFailModal);
             }
         }
-
-        // Логика для режима "300 Спартанцев"
-        document.querySelector('.spartan-mode').addEventListener('click', function() {
-            toc.classList.add('hidden');
-            const spartanChapter = document.getElementById('spartan-chapter');
-            currentChapterId = 'spartan-chapter';
-            spartanChapter.innerHTML = '';
-            spartanChapter.classList.add('active');
-
-            // Собираем все вопросы из всех глав
-            spartanQuestions = [];
-            for (const chapterId in originalChaptersContent) {
-                const questions = Array.from(originalChaptersContent[chapterId].querySelectorAll('.question'));
-                spartanQuestions = spartanQuestions.concat(questions.map(q => q.cloneNode(true)));
-            }
-
-            // Перемешиваем вопросы
-            spartanQuestions.sort(() => 0.5 - Math.random());
-            totalQuestions = spartanQuestions.length;
-            correctAnswers = 0;
-            answeredQuestions = 0;
-            currentSpartanIndex = 0;
-
-            // Добавляем прогресс-бар
-            const progressContainer = document.createElement('div');
-            progressContainer.classList.add('progress-container');
-            const progressBar = document.createElement('div');
-            progressBar.classList.add('progress-bar');
-            progressBar.id = 'spartan-progress';
-            progressContainer.appendChild(progressBar);
-            spartanChapter.appendChild(progressContainer);
-
-            // Показываем первый вопрос
-            showSpartanQuestion();
-            updateProgressBar();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
 
         function updateProgressBar() {
             const progressBar = document.getElementById('spartan-progress');
@@ -3553,15 +3691,13 @@
             const spartanChapter = document.getElementById('spartan-chapter');
             const currentQuestion = spartanChapter.querySelector('.question');
 
-            // Удаляем текущий вопрос, только если есть следующий вопрос
             if (currentQuestion && currentSpartanIndex < spartanQuestions.length) {
                 currentQuestion.classList.add('slide-out');
                 setTimeout(() => {
                     currentQuestion.remove();
-                }, 500); // Даем анимации завершиться
+                }, 500);
             }
 
-            // Показываем следующий вопрос
             setTimeout(() => {
                 if (currentSpartanIndex < spartanQuestions.length) {
                     const question = spartanQuestions[currentSpartanIndex].cloneNode(true);
@@ -3573,15 +3709,16 @@
                         optionsList.appendChild(optionsList.removeChild(options[j]));
                     }
                     options.forEach(opt => {
-                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                        opt.classList.remove('correct', 'incorrect', 'hidden', 'selected', 'correct-hint');
                         opt.style.pointerEvents = 'auto';
                         opt.removeEventListener('click', handleSpartanOptionClick);
                         opt.addEventListener('click', handleSpartanOptionClick);
                     });
+                    question.classList.remove('answered');
                     question.classList.add('slide-in');
                     spartanChapter.appendChild(question);
                 }
-            }, currentQuestion && currentSpartanIndex < spartanQuestions.length ? 500 : 0); // Если есть текущий вопрос и следующий, ждем завершения анимации
+            }, currentQuestion && currentSpartanIndex < spartanQuestions.length ? 500 : 0);
         }
 
         function handleSpartanOptionClick() {
@@ -3611,17 +3748,14 @@
                 answeredQuestions++;
                 currentSpartanIndex++;
                 updateProgressBar();
-                // Проверяем, превышает ли количество ошибок 51%
                 const incorrectCount = answeredQuestions - correctAnswers;
                 const incorrectPercentage = (incorrectCount / totalQuestions) * 100;
                 if (incorrectPercentage > 51) {
                     showSpartanFailResults();
-                    return;
-                }
-                if (currentSpartanIndex < spartanQuestions.length) {
-                    showSpartanQuestion(); // Показываем следующий вопрос, если он есть
+                } else if (currentSpartanIndex < spartanQuestions.length) {
+                    showSpartanQuestion();
                 } else {
-                    showSpartanResults(); // Показываем результаты, если это последний вопрос
+                    showSpartanResults();
                 }
             } else if (selectedOptions.length === totalCorrect && selectedOptions.every(opt => opt.getAttribute('data-correct') === 'true')) {
                 options.forEach(opt => {
@@ -3639,9 +3773,9 @@
                 currentSpartanIndex++;
                 updateProgressBar();
                 if (currentSpartanIndex < spartanQuestions.length) {
-                    showSpartanQuestion(); // Показываем следующий вопрос, если он есть
+                    showSpartanQuestion();
                 } else {
-                    showSpartanResults(); // Показываем результаты, если это последний вопрос
+                    showSpartanResults();
                 }
             }
         }
@@ -3651,20 +3785,21 @@
             if (percentage === 100) {
                 spartanPerfectScore.textContent = `${percentage.toFixed(2)}%`;
                 spartanPerfectMotivation.textContent = "Великолепно, воин! Ты — истинный герой Спарты, чья мудрость и стойкость войдут в легенды! Твоя слава будет вечной! 🏅🔥";
-                spartanPerfectModal.style.display = 'block';
+                spartanPerfectModal.classList.add('active');
                 scrollToElement(spartanPerfectModal);
             } else {
                 spartanIntermediateScore.textContent = `${percentage.toFixed(2)}%`;
-                const motivation = "Спарта не сдается! Ты сделал шаг вперед, но дорога к славе еще длинна. Соберись и попробуй снова! ⚔️💥";
-                spartanIntermediateMotivation.textContent = motivation;
-                spartanIntermediateModal.style.display = 'block';
+                spartanIntermediateMotivation.textContent = "Спарта не сдается! Ты сделал шаг вперед, но дорога к славе еще длинна. Соберись и попробуй снова! ⚔️💥";
+                spartanIntermediateModal.classList.add('active');
                 scrollToElement(spartanIntermediateModal);
             }
         }
 
         function showSpartanFailResults() {
+            const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+            spartanFailScore.textContent = `${percentage.toFixed(2)}%`;
             spartanFailMotivation.textContent = "Эта бойня тебе не по зубам! Окстись, посещая это место! ⚰️😵";
-            spartanFailModal.style.display = 'block';
+            spartanFailModal.classList.add('active');
             scrollToElement(spartanFailModal);
         }
 
@@ -3674,7 +3809,7 @@
                 const optionsList = question.querySelector('.options');
                 const options = Array.from(optionsList.children);
                 options.forEach(opt => {
-                    opt.classList.remove('correct', 'incorrect', 'hidden', 'selected');
+                    opt.classList.remove('correct', 'incorrect', 'correct-hint', 'hidden', 'selected');
                     opt.style.pointerEvents = 'auto';
                     opt.removeEventListener('click', handleOptionClick);
                     opt.addEventListener('click', handleOptionClick);
@@ -3704,7 +3839,15 @@
 
             if (!isCorrect) {
                 options.forEach(opt => {
-                    if (opt !== this) opt.classList.add('hidden');
+                    if (currentMode === 'intuition') {
+                        if (opt.getAttribute('data-correct') === 'true') {
+                            opt.classList.add('correct-hint');
+                        } else if (opt !== this) {
+                            opt.classList.add('hidden');
+                        }
+                    } else if (opt !== this) {
+                        opt.classList.add('hidden');
+                    }
                     opt.style.pointerEvents = 'none';
                 });
                 this.classList.remove('selected');
@@ -3754,23 +3897,12 @@
         function showResults() {
             const percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
             modalScore.textContent = `${percentage.toFixed(2)}%`;
-            let motivation;
-            if (percentage === 100) {
-                motivation = "Превосходно! Вы настоящий эксперт!";
-            } else if (percentage >= 80) {
-                motivation = "Отличная работа! Продолжайте в том же духе!";
-            } else if (percentage >= 60) {
-                motivation = "Хорошо! Есть к чему стремиться!";
-            } else {
-                motivation = "Не сдавайтесь! Практика делает совершенство!";
-            }
-            modalMotivation.textContent = motivation;
-            resultModal.style.display = 'block';
+            resultModal.classList.add('active');
             scrollToElement(resultModal);
         }
 
         function showBlacklistModal() {
-            blacklistModal.style.display = 'block';
+            blacklistModal.classList.add('active');
             scrollToElement(blacklistModal);
             let countdown = 3;
             countdownElement.textContent = countdown;
@@ -3780,14 +3912,14 @@
                 countdownElement.textContent = countdown;
                 if (countdown <= 0) {
                     clearInterval(interval);
-                    blacklistModal.style.display = 'none';
+                    blacklistModal.classList.remove('active');
                     generateBlacklistTest();
                 }
             }, 1000);
         }
 
         function showBlacklistSuccess() {
-            blacklistSuccessModal.style.display = 'block';
+            blacklistSuccessModal.classList.add('active');
             scrollToElement(blacklistSuccessModal);
         }
 
@@ -3799,7 +3931,7 @@
 
             const backButton = document.createElement('button');
             backButton.textContent = 'ВЕРНУТЬСЯ К ОГЛАВЛЕНИЮ';
-            backButton.classList.add('back-button');
+            backButton.classList.add('custom-button', 'back-button');
             backButton.addEventListener('click', resetChapter);
             tempChapter.appendChild(backButton);
 
@@ -3822,6 +3954,17 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function resetOriginalChapters() {
+            for (const chapterId in originalChaptersContent) {
+                const chapter = document.getElementById(chapterId);
+                if (chapter) {
+                    const originalContent = originalChaptersContent[chapterId].cloneNode(true);
+                    chapter.innerHTML = originalContent.innerHTML;
+                    initializeOptions(chapterId);
+                }
+            }
+        }
+
         function resetChapter() {
             const activeChapter = document.querySelector('.chapter.active');
             if (activeChapter) {
@@ -3829,20 +3972,29 @@
                 if (activeChapter.id === 'temp-blacklist-chapter') {
                     container.removeChild(activeChapter);
                     const originalChapter = document.getElementById(currentChapterId.replace('temp-blacklist-', ''));
-                    if (originalChapter) originalChapter.classList.add('active');
+                    if (originalChapter) {
+                        originalChapter.classList.add('active');
+                        initializeOptions(originalChapter.id);
+                    }
                 } else if (activeChapter.id !== 'test-chapter' && activeChapter.id !== 'spartan-chapter') {
-                    const originalContent = originalChaptersContent[activeChapter.id];
+                    const originalContent = originalChaptersContent[activeChapter.id].cloneNode(true);
                     activeChapter.innerHTML = originalContent.innerHTML;
+                    initializeOptions(activeChapter.id);
                 } else {
                     activeChapter.innerHTML = '';
                 }
             }
             toc.classList.remove('hidden');
+            if (activeTocItem) {
+                resetTocItem(activeTocItem);
+                activeTocItem = null;
+            }
             correctAnswers = 0;
             answeredQuestions = 0;
             incorrectQuestions = [];
             hasEnteredBlacklist = false;
             currentChapterId = null;
+            currentMode = null;
             spartanQuestions = [];
             currentSpartanIndex = 0;
             testQuestions = [];
